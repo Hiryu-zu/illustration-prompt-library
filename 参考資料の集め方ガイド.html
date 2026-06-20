@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>参考資料の集め方ガイド｜AIイラスト プロンプト置き場</title>
+<style>
+  :root{
+    --bg:#f6f5f2; --panel:#ffffff; --ink:#23201c; --sub:#7c756c; --line:#e6e2db;
+    --accent:#9a6a3a; --accent-soft:#f0e7dc; --accent-ink:#fff;
+    --green:#2f8a52; --green-bg:#e9f6ee; --blue:#3a6ea5; --blue-bg:#e8f0f8;
+    --purple:#7a4fa3; --purple-bg:#f0e9f7; --gray:#6b7280; --gray-bg:#eef0f2;
+    --orange:#c0682f; --orange-bg:#fbeee2;
+    --code-bg:#fcfbf9; --code-ink:#2b2722; --desc-ink:#4a443c; --intro-ink:#5a4a38;
+    --header-bg:rgba(255,255,255,.92); --nav-bg:#fbfaf8; --toast-bg:#23201c; --toast-ink:#fff;
+    --star:#e0a52e; --shadow:rgba(0,0,0,.12);
+    --strat:#9a6a3a; --x:#1d1d1f; --note:#2f8a52; --site:#3a6ea5; --tool:#c0682f; --ref:#6b7280; --my:#c23a63;
+  }
+  html[data-theme="dark"]{
+    --bg:#181613; --panel:#23201c; --ink:#ece7df; --sub:#a39b8e; --line:#3a352e;
+    --accent:#cf9457; --accent-soft:#33291e; --accent-ink:#1c1813;
+    --green:#5fc488; --green-bg:#1c2c22; --blue:#7aa9d8; --blue-bg:#1a2531; --purple:#b890dc; --purple-bg:#271d33;
+    --gray:#9aa1ab; --gray-bg:#242a30; --orange:#e08a52; --orange-bg:#2e2117;
+    --code-bg:#1b1916; --code-ink:#d8d2c7; --desc-ink:#c3bcaf; --intro-ink:#d2c8b8;
+    --header-bg:rgba(30,27,23,.92); --nav-bg:#1d1b17; --toast-bg:#ece7df; --toast-ink:#1c1813;
+    --star:#f0bf52; --shadow:rgba(0,0,0,.5);
+    --strat:#cf9457; --x:#e6e6e8; --note:#5fc488; --site:#7aa9d8; --tool:#e08a52; --ref:#9aa1ab; --my:#e2719a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;background:var(--bg);color:var(--ink);transition:background .2s,color .2s;}
+  header{position:sticky;top:0;z-index:20;background:var(--header-bg);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px;padding:10px 18px;flex-wrap:wrap;}
+  header h1{font-size:16px;margin:0;font-weight:700;letter-spacing:.02em;white-space:nowrap;}
+  header .meta{color:var(--sub);font-size:12px;}
+  .spacer{flex:1;}
+  .search{position:relative;}
+  .search input{width:220px;max-width:46vw;padding:7px 12px 7px 30px;border:1px solid var(--line);border-radius:999px;font-size:13px;background:var(--panel);color:var(--ink);}
+  .search svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);opacity:.45;}
+  .iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:7px 11px;font-size:13px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;}
+  .iconbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .iconbtn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .iconbtn.primary:hover{filter:brightness(1.07);color:var(--accent-ink);}
+
+  .layout{display:flex;min-height:calc(100vh - 53px);}
+  aside{width:288px;flex-shrink:0;border-right:1px solid var(--line);background:var(--nav-bg);overflow-y:auto;height:calc(100vh - 53px);position:sticky;top:53px;}
+  .grp{padding:14px 14px 4px;font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.08em;}
+  .nav-item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:none;background:none;cursor:pointer;padding:9px 14px;border-left:3px solid transparent;color:var(--ink);}
+  .nav-item:hover{background:var(--accent-soft);}
+  .nav-item.active{background:var(--panel);border-left-color:var(--accent);}
+  .nav-item .t{font-size:13.5px;line-height:1.4;flex:1;}
+  .nav-item .c{font-size:11px;color:var(--sub);background:var(--gray-bg);border-radius:999px;padding:2px 8px;}
+
+  main{flex:1;min-width:0;padding:22px 30px 80px;overflow-x:hidden;}
+  .doc-head{margin-bottom:6px;}
+  .doc-char{display:inline-block;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;color:#fff;margin-bottom:10px;}
+  .doc-title{font-size:23px;margin:0 0 6px;font-weight:800;line-height:1.3;}
+  .intro{background:var(--accent-soft);border-radius:12px;padding:14px 18px;margin:14px 0 18px;font-size:13.5px;line-height:1.85;white-space:pre-wrap;color:var(--intro-ink);}
+
+  .toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:0 0 18px;}
+  .chip{border:1px solid var(--line);background:var(--panel);color:var(--sub);border-radius:999px;padding:5px 12px;font-size:12px;cursor:pointer;}
+  .chip:hover{border-color:var(--accent);}
+  .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .chip.star.on{background:var(--star);border-color:var(--star);color:#3a2c05;}
+  .tb-spacer{flex:1;}
+
+  .block{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden;}
+  .block-head{display:flex;align-items:center;gap:9px;padding:12px 15px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  .block-head .h{font-size:14px;font-weight:700;}
+  .badge{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;}
+  .badge.cmd{background:var(--blue-bg);color:var(--blue);}
+  .badge.tip{background:var(--green-bg);color:var(--green);}
+  .badge.tpl{background:var(--accent-soft);color:var(--accent);}
+  .badge.link{background:var(--gray-bg);color:var(--gray);}
+  .bh-spacer{flex:1;}
+  .fav{border:1px solid var(--line);background:var(--panel);color:var(--sub);border-radius:7px;padding:4px 9px;font-size:13px;cursor:pointer;line-height:1;}
+  .fav:hover{border-color:var(--star);color:var(--star);}
+  .fav.on{background:var(--star);border-color:var(--star);color:#3a2c05;}
+  .copy,.mini{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:7px;padding:5px 11px;font-size:12px;cursor:pointer;display:inline-flex;gap:5px;align-items:center;}
+  .copy:hover,.mini:hover{border-color:var(--accent);color:var(--accent);}
+  .copy.done{background:var(--green);border-color:var(--green);color:#fff;}
+  .mini.del:hover{border-color:#c0432f;color:#c0432f;}
+  .desc{padding:12px 18px 0;font-size:13px;line-height:1.75;color:var(--desc-ink);white-space:pre-wrap;}
+  pre.body{margin:12px 18px 16px;padding:14px 16px;font-family:ui-monospace,Menlo,Consolas,"Courier New",monospace;font-size:13px;line-height:1.7;
+    white-space:pre-wrap;word-break:break-word;color:var(--code-ink);background:var(--code-bg);border:1px solid var(--line);border-radius:8px;}
+  pre.body.ja{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;}
+  pre.body mark, .desc mark, .doc-title mark, .nav-item mark{background:var(--star);color:#3a2c05;border-radius:3px;padding:0 1px;}
+  .blockurl{margin:-6px 18px 14px;font-size:12px;}
+  .blockurl a{color:var(--blue);text-decoration:none;word-break:break-all;}
+  .blockurl a:hover{text-decoration:underline;}
+  .links{padding:6px 18px 16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;}
+  .link-card{border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:var(--code-bg);font-size:12.5px;line-height:1.55;}
+  .link-card a{color:var(--blue);font-weight:700;text-decoration:none;word-break:break-all;}
+  .link-card a:hover{text-decoration:underline;}
+  .link-card .ld{color:var(--sub);margin-top:4px;}
+  .link-card .lu{display:flex;gap:8px;margin-top:7px;}
+  .empty{color:var(--sub);text-align:center;margin-top:14vh;font-size:14px;line-height:2;}
+
+  /* builder */
+  .builder{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;}
+  .field{margin-bottom:13px;}
+  .field label{display:block;font-size:12px;font-weight:700;color:var(--sub);margin-bottom:5px;}
+  .field input[type=text],.field input[type=number],.field input[type=date],.field select,.field textarea{
+    width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:13px;font-family:inherit;}
+  .field textarea{min-height:90px;resize:vertical;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;}
+  .row .field{flex:1;min-width:130px;}
+  .checks{display:flex;gap:14px;flex-wrap:wrap;}
+  .checks label{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);font-weight:500;cursor:pointer;}
+  .builder-out{margin-top:8px;}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:none;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow:auto;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:560px;max-width:100%;padding:22px;box-shadow:0 18px 50px var(--shadow);}
+  .modal h3{margin:0 0 16px;font-size:17px;}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--toast-bg);color:var(--toast-ink);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:80;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .hamb{display:none;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px;}
+  @media (max-width:820px){
+    aside{position:fixed;left:0;top:53px;bottom:0;z-index:30;transform:translateX(-100%);transition:.25s;box-shadow:2px 0 18px var(--shadow);height:auto;}
+    aside.open{transform:translateX(0);}
+    .hamb{display:inline-block;}
+    main{padding:18px 16px 70px;}
+    .search input{width:130px;}
+    .hide-sm{display:none;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <button class="hamb" id="hamb">☰</button>
+  <h1>🎨 プロンプト置き場</h1>
+  <span class="meta hide-sm" id="hcount"></span>
+  <div class="spacer"></div>
+  <div class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="search" type="search" placeholder="検索 ( / )">
+  </div>
+  <button class="iconbtn primary" id="addBtn">＋ 追加</button>
+  <button class="iconbtn hide-sm" id="exportBtn" title="バックアップを書き出し">⬇</button>
+  <button class="iconbtn hide-sm" id="importBtn" title="バックアップを読み込み">⬆</button>
+  <button class="iconbtn" id="themeBtn" title="表示テーマ切替">🌙</button>
+  <input type="file" id="importFile" accept="application/json" style="display:none">
+</header>
+<div class="layout">
+  <aside id="nav"></aside>
+  <main id="main"><div class="empty">左の一覧から項目を選んでください。</div></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3 id="modalTitle">プロンプトを追加</h3>
+    <div class="field"><label>タイトル</label><input type="text" id="f_head" placeholder="例：水彩風の基本呪文"></div>
+    <div class="row">
+      <div class="field"><label>分類</label>
+        <select id="f_group">
+          <option value="my">マイプロンプト</option>
+          <option value="strat">全体戦略</option>
+          <option value="x">X（旧Twitter）</option>
+          <option value="note">note / Threads</option>
+          <option value="site">まとめ・投稿サイト</option>
+          <option value="tool">画像→プロンプト</option>
+        </select>
+      </div>
+      <div class="field"><label>種類</label>
+        <select id="f_kind">
+          <option value="cmd">検索コマンド</option>
+          <option value="tip">コツ</option>
+          <option value="tpl">テンプレ</option>
+          <option value="link">メモ</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>本文（コピー対象）</label><textarea id="f_body" placeholder="ここに保存したいプロンプトや検索コマンドを貼り付け"></textarea></div>
+    <div class="field"><label>説明（任意）</label><input type="text" id="f_desc" placeholder="使いどころのメモ"></div>
+    <div class="field"><label>関連URL（任意）</label><input type="text" id="f_url" placeholder="https://…"></div>
+    <div class="modal-actions">
+      <button class="iconbtn" id="modalCancel">キャンセル</button>
+      <button class="iconbtn primary" id="modalSave">保存</button>
+    </div>
+  </div>
+</div>
+
+<script id="data" type="application/json"></script>
+<script>
+const RAW = [
+  {
+    id:"overview", group:"strat", glabel:"全体戦略",
+    title:"全体ワークフロー（集める→保存→分類→再利用）",
+    intro:"このガイドの目的は「参考資料（プロンプト・参考画像）をいかに効率よく集めるか」を仕組み化することです。\n\n基本方針：\n①『プロンプトが既に公開されている』情報源を最優先に当たる（まとめ投稿サイト）。\n②X・note・Threadsで最新トレンドと作者の生情報を拾う。\n③渡された参考画像のキャラは、画像→プロンプト逆生成ツールで骨格を抽出し、自分のプロンプトに融合する。\n④集めた素材はブックマーク／リスト／このビューアーに一元保存して再利用する。",
+    items:[
+      {head:"収集の4ステップ", kind:"tip",
+       desc:"プラットフォームごとに役割が違う。下記の流れで回すと重複なく効率的に集まる。",
+       body:"1. 【探す】公開プロンプト付きサイト（chichi-pui / PromptHero 等）でキーワード検索\n2. 【拾う】X高度検索で『人気＋画像＋日本語＋期間』に絞り、作者の生プロンプトを拾う\n3. 【深掘り】note / Threadsで体系的な解説・コツ記事を読む\n4. 【逆算】参考画像のキャラは image-to-prompt で要素を抽出 → 自分のプロンプトへ融合\n→ 集めたものはブックマーク／X リスト／このHTMLに保存して再利用"},
+      {head:"情報源ごとの強み（使い分け早見表）", kind:"tip",
+       desc:"目的に応じて入口を変えると無駄打ちが減る。",
+       body:"・まとめ投稿サイト … プロンプトが公開済み＝即コピーできる。最短ルート\n・X（旧Twitter） … 最新トレンド・バズ作品・作者直の呪文。鮮度が高い\n・note … 体系的な解説・書き方のコツ・サイトまとめ。学習向き\n・Threads … 新興。画像投稿＋手法シェアが増加中\n・image-to-prompt … 手元の参考画像から構図・スタイルを言語化"}
+    ]
+  },
+  {
+    id:"x-search", group:"x", glabel:"X（旧Twitter）",
+    title:"X 高度検索コマンド集（コピーして検索窓へ）",
+    intro:"Xは検索演算子を組み合わせると一気に精度が上がる。検索窓に貼り付けるだけで使える。\nポイント：min_faves（最低いいね数）で品質を、filter:images で画像のみ、lang:ja で日本語、since/until で期間を絞る。\n※ min_faves は公式の検索フォームには無いが、検索窓に直接打てば今も有効。\n※ 上の『🛠 検索コマンドビルダー』を使うとフォーム入力で自動生成＆そのままX検索できます。",
+    items:[
+      {head:"人気のAIイラストだけを画像付きで", kind:"cmd",
+       desc:"いいね500以上・画像あり・日本語に限定。質の高い作品が一覧できる。",
+       body:"(AIイラスト OR AIart OR AIイラスト好きと繋がりたい) filter:images min_faves:500 lang:ja"},
+      {head:"プロンプト（呪文）公開ポストを探す", kind:"cmd",
+       desc:"プロンプトを本文に書いている投稿を狙い撃ち。",
+       body:"(プロンプト OR 呪文 OR prompt) filter:images min_faves:100 lang:ja -RT"},
+      {head:"期間を区切ってトレンドを追う", kind:"cmd",
+       desc:"直近半年の人気作だけ。日付は適宜書き換える。",
+       body:"AIイラスト filter:images min_faves:300 since:2026-01-01 until:2026-06-30 lang:ja"},
+      {head:"特定の作者・モデルから集める", kind:"cmd",
+       desc:"from: で作者指定、キーワードでモデル指定。アカウント名は @ を外して入力。",
+       body:"from:アカウント名 filter:images\n\nniji OR nijijourney filter:images min_faves:200 lang:ja"},
+      {head:"特定スタイル＋高品質に絞る", kind:"cmd",
+       desc:"スタイル語を足してさらに絞り込む。RT・リプライを除外してオリジナル投稿のみ。",
+       body:"(水彩 OR 厚塗り OR セルルック OR 線画) AIイラスト filter:images min_faves:200 lang:ja -filter:replies -RT"},
+      {head:"よく使う演算子リファレンス", kind:"tip",
+       desc:"組み合わせは自由。スペース区切りでAND検索になる。",
+       body:"filter:images   … 画像付きのみ\nmin_faves:N     … いいねN以上（min_retweets / min_replies も同様）\nlang:ja          … 日本語のみ\nsince:YYYY-MM-DD / until:YYYY-MM-DD … 期間\nfrom:user / to:user … 投稿者・宛先\n-RT / -filter:replies … リツイート・リプライ除外\n\"完全一致\"        … フレーズ固定\nA OR B           … いずれか"}
+    ],
+    links:[
+      {title:"X 高度検索（公式フォーム）", url:"https://x.com/search-advanced", desc:"演算子をフォームで組み立てられる公式ページ"},
+      {title:"Twitter Advanced Search 演算子一覧（GitHub / igorbrigadir）", url:"https://github.com/igorbrigadir/twitter-advanced-search", desc:"使える演算子を網羅したリファレンス（英語）"},
+      {title:"生成AI時代のX検索テクニック｜yo4shi80（note）", url:"https://note.com/yo4shi80/n/nbd9c06dc4775", desc:"信頼できる発信者・注目投稿への辿り着き方"}
+    ]
+  },
+  {
+    id:"x-ops", group:"x", glabel:"X（旧Twitter）",
+    title:"X 収集の運用テンプレ（リスト・ブックマーク）",
+    intro:"検索で見つけた良い作者は『リスト』に、良い投稿は『ブックマーク』に貯めると、毎回検索し直さずに済む。",
+    items:[
+      {head:"集めるための運用ルール", kind:"tpl",
+       desc:"このルールをメモ帳やNotionに貼って運用する。",
+       body:"【X 収集運用テンプレ】\n■ リスト（作者の管理）\n  ・良いプロンプトを出す作者を見つけたら専用リスト「AIイラスト_参考」に追加\n  ・リストのタイムラインを巡回＝検索より速く新作が集まる\n■ ブックマーク（投稿の保存）\n  ・呪文が書かれた投稿・参考にしたい構図は即ブックマーク\n  ・後でこのHTMLに転記して分類\n■ 定期巡回（週1）\n  ・保存した検索コマンドを実行 → 新着の人気作をチェック\n  ・参考画像はダウンロードして 03_named_images に保存\n■ 出典メモ\n  ・拾ったプロンプトは必ず元ポストURLを残す（再現性・クレジット用）"}
+    ],
+    links:[
+      {title:"X(旧Twitter)でシェアされたAIイラストpromptと活用方法｜りけろぐ", url:"https://rikei-life.com/ai-illustration-prompts-from-x/", desc:"Xで拾ったプロンプトの集め方・活かし方"},
+      {title:"Xで映える画像生成AIプロンプト完全ガイド｜AI革命ポータル", url:"https://aikakumei.jp/ai-prompt-guide-for-x/", desc:"X向けプロンプトの実例と作り方"}
+    ]
+  },
+  {
+    id:"note", group:"note", glabel:"note / Threads",
+    title:"note からの収集（体系的な解説・まとめ）",
+    intro:"noteは「書き方のコツ」「サイトまとめ」など体系的な記事が強い。検索は note内検索＋Google『site:note.com キーワード』が効率的。",
+    items:[
+      {head:"note内を効率検索するコマンド", kind:"cmd",
+       desc:"Googleの site: 演算子でnote記事だけを横断検索する。",
+       body:"site:note.com AIイラスト プロンプト まとめ\nsite:note.com 画像生成 呪文 コツ"},
+      {head:"集める観点", kind:"tip",
+       desc:"noteは『まとめ系記事』を1本見つけると芋づる式にサイトが集まる。",
+       body:"・「プロンプトまとめサイト集」系の記事をブックマーク（リンク集として再利用）\n・「書き方のコツ」系で語彙（スタイル語・画質語）のストックを増やす\n・有料記事は無料部分でプロンプト例の有無を見極めてから判断"}
+    ],
+    links:[
+      {title:"【2026年最新版】AIプロンプトまとめサイト集｜藤井翔太（note）", url:"https://note.com/f_bby__shota/n/ne56f82fa6051", desc:"カテゴリー別のまとめサイト紹介。リンク集として優秀"},
+      {title:"イラスト生成プロンプト書き方の10のコツ【2025年版】｜ミヤマ（note）", url:"https://note.com/mmmiyama/n/nf9c31c0c2be0", desc:"プロンプトの語彙・構造の基礎"},
+      {title:"画像からプロンプトを作成する方法｜りん蔵（note）", url:"https://note.com/arimairin/n/nb6a411e0939c", desc:"参考画像からプロンプトを起こす実践"}
+    ]
+  },
+  {
+    id:"threads", group:"note", glabel:"note / Threads",
+    title:"Threads からの収集（新興・画像投稿）",
+    intro:"ThreadsはMeta製のテキスト中心SNSだが、画像投稿とAI手法シェアが増加中。検索タブでキーワード巡回＋良い投稿のフォローが基本。",
+    items:[
+      {head:"集める観点", kind:"tip",
+       desc:"Threadsはまだ発展途上。XやInstagramの作者が流入しているので併用で取りこぼしを防ぐ。",
+       body:"・検索タブで「AIイラスト」「画像生成」「プロンプト」を巡回\n・良い発信者をフォロー → おすすめフィードに類似投稿が増える\n・Instagram連携の作者が多いので、Instagramのタグ #aiart #aiイラスト も併せて確認"}
+    ],
+    links:[
+      {title:"Threadsで差をつける！画像生成AI活用テクニック10選｜スレッズ研究家（note）", url:"https://note.com/threads_pro/n/n31bc10ce5a2e", desc:"Threadsでの画像生成AI活用のまとめ"}
+    ]
+  },
+  {
+    id:"jp-sites", group:"site", glabel:"まとめ・投稿サイト",
+    title:"国内プロンプト投稿サイト（プロンプト公開＝即コピー）",
+    intro:"最短ルート。投稿画像にプロンプト／ネガティブが公開されているサイトを使えば、検索して気に入った画像のプロンプトをそのままコピーできる。",
+    items:[
+      {head:"使い方の基本", kind:"tip",
+       desc:"『プロンプト公開あり』の作品を中心に、キーワードやタグで絞り込む。",
+       body:"・キーワード／タグで作品検索 → 気に入った画像の詳細でプロンプトを確認\n・プロンプト＋ネガティブをセットでコピーして保存\n・国内サイトは日本語タグが効くので、ニッチな題材も探しやすい"}
+    ],
+    links:[
+      {title:"chichi-pui（ちちぷい）", url:"https://www.chichi-pui.com/", desc:"国内最大級（会員40万人）。投稿画像にプロンプト/ネガティブが公開され、そのままコピー可。生成機能も無料であり"},
+      {title:"ちちぷい魔導図書館（技法・コツ解説）", url:"https://grm.chichi-pui.com/", desc:"AIイラストの作り方・テクニック記事のまとめ"},
+      {title:"AIイラスト プロンプト一覧まとめ｜GAZAI", url:"https://gazai.net/prompt-book", desc:"プロンプトをカテゴリ別に一覧化したプロンプトブック"},
+      {title:"おすすめプロンプトサイト3選｜romptn Magazine", url:"https://romptn.com/article/66687", desc:"イメージ通りに作れるプロンプトサイトの比較"},
+      {title:"AIイラスト＆画像投稿サイトまとめ｜illust55", url:"https://illust55.com/7882/", desc:"入門〜プロまでの投稿サイト網羅リスト"},
+      {title:"AIイラスト投稿サイトおすすめ6選｜Andup Media", url:"https://andup.co.jp/media/ai/post_services/", desc:"Aipictors等を含む投稿サイト比較"}
+    ]
+  },
+  {
+    id:"global-sites", group:"site", glabel:"まとめ・投稿サイト",
+    title:"海外プロンプト検索サイト（数百万件・英語）",
+    intro:"英語圏は母数が桁違い。プロンプトと生成結果がセットで検索でき、Midjourney / Stable Diffusion 系の高品質な作例が豊富。",
+    items:[
+      {head:"使い方の基本", kind:"tip",
+       desc:"英語キーワードで検索 → 画像クリックでプロンプトとパラメータが見える。",
+       body:"・英語キーワード（例: anime girl, cinematic lighting）で検索\n・モデル別（Midjourney / SD / DALL·E）に絞り込めるサイトが多い\n・コピーしたら日本語題材に合わせて単語を差し替えて流用"}
+    ],
+    links:[
+      {title:"PromptHero", url:"https://prompthero.com/", desc:"世界最大級。数百万件のAI画像＋プロンプトを検索。Midjourney/SD/ChatGPT対応"},
+      {title:"Lexica", url:"https://lexica.art/", desc:"Stable Diffusion系の画像＆プロンプト検索エンジン"},
+      {title:"PromptBase", url:"https://promptbase.com/", desc:"プロンプトのマーケットプレイス。高品質な有料/無料プロンプト"},
+      {title:"PromptDen", url:"https://promptden.com/", desc:"カテゴリ別に整理されたプロンプトライブラリ"},
+      {title:"DeviantArt", url:"https://www.deviantart.com/", desc:"海外イラスト投稿。プロンプト併記の作品も多い"}
+    ]
+  },
+  {
+    id:"img2prompt", group:"tool", glabel:"画像→プロンプト",
+    title:"画像→プロンプト逆生成ツール（参考画像キャラの活用）",
+    intro:"渡された参考画像のキャラを再現したいときの中核。画像をアップすると構図・色・スタイルを解析してプロンプト化してくれる。\n抽出したプロンプトはそのまま使わず、キャラ固有の要素（髪・服・特徴）を残して自分の指示と融合させるのがコツ。",
+    items:[
+      {head:"参考画像 → 融合プロンプトの手順テンプレ", kind:"tpl",
+       desc:"このテンプレに沿って、参考画像の骨格を自分のプロンプトに取り込む。",
+       body:"【参考画像キャラ → 融合プロンプト 手順】\n1. image-to-promptツールに参考画像をアップロード\n2. 出力プロンプトから『再利用する要素』を抽出\n   - キャラ特徴：髪色・髪型・瞳・服装・アクセサリ\n   - 画風：スタイル語（anime / semi-real 等）・画質語\n   - 構図/光：アングル・ライティング\n3. 不要な背景・固有名詞・透かし関連の語を削除\n4. 自分の指示（ポーズ・表情・シーン）と結合\n5. ネガティブを足して仕上げ\n\n例）\n[キャラ要素], [画風], [構図/光], [自分の指示:ポーズ・表情・背景]\nNegative: lowres, bad anatomy, extra fingers, watermark"},
+      {head:"ツール選びの観点", kind:"tip",
+       desc:"アニメ・キャラ系なら専用ツール、写実なら汎用ツールが向く。",
+       body:"・アニメ/キャラ系 … アニメ特化ツール（タグ形式で出力されSD系と相性良）\n・写実/汎用 … Midjourney向けの文章型プロンプトを出すツール\n・英語出力が基本 → 日本語題材は単語を差し替えて使う"}
+    ],
+    links:[
+      {title:"ImagePrompt.org（Image to Prompt）", url:"https://imageprompt.org/image-to-prompt", desc:"ブラウザ無料。Midjourney/Flux/SD向けに詳細プロンプト化"},
+      {title:"無料の画像→プロンプト生成ツール5選｜CyberLink", url:"https://jp.cyberlink.com/blog/photoeditor/5035/generate-image-prompt", desc:"MyEdit等を比較した日本語まとめ"},
+      {title:"画像からプロンプトを抽出するツール3選｜PerfectCorp", url:"https://www.perfectcorp.com/ja/consumer/blog/generative-AI/generate-prompts-from-image", desc:"スマホ/PC対応の抽出ツール解説"},
+      {title:"AIで画像からプロンプトを生成するサイト9選｜Vidnoz", url:"https://jp.vidnoz.com/ai-solutions/image-to-prompt-generators.html", desc:"無料ツールを幅広く比較"},
+      {title:"Image to Prompt（Anifun・ログイン不要）", url:"https://anifun.ai/image-to-prompt/", desc:"登録不要で使えるアニメ寄りの逆生成"}
+    ]
+  },
+  {
+    id:"sources", group:"ref", glabel:"出典",
+    title:"参考URL一覧（このガイドの調査ソース）",
+    intro:"2026-06-18 時点でWeb検索により収集。各情報源はカテゴリ別の項目内にも掲載。",
+    items:[
+      {head:"出典まとめ（コピー用）", kind:"link",
+       body:"【X / 検索】\nX 高度検索: https://x.com/search-advanced\nTwitter Advanced Search 演算子: https://github.com/igorbrigadir/twitter-advanced-search\nX検索テクニック(yo4shi80): https://note.com/yo4shi80/n/nbd9c06dc4775\nXのAIイラストprompt活用(りけろぐ): https://rikei-life.com/ai-illustration-prompts-from-x/\nX向けプロンプト完全ガイド(AI革命): https://aikakumei.jp/ai-prompt-guide-for-x/\n\n【note / Threads】\nAIプロンプトまとめサイト集2026(藤井翔太): https://note.com/f_bby__shota/n/ne56f82fa6051\nプロンプト書き方10のコツ(ミヤマ): https://note.com/mmmiyama/n/nf9c31c0c2be0\n画像からプロンプト作成(りん蔵): https://note.com/arimairin/n/nb6a411e0939c\nThreads画像生成AI活用10選(スレッズ研究家): https://note.com/threads_pro/n/n31bc10ce5a2e\n\n【投稿・まとめサイト】\nchichi-pui: https://www.chichi-pui.com/\nちちぷい魔導図書館: https://grm.chichi-pui.com/\nGAZAI プロンプトブック: https://gazai.net/prompt-book\nプロンプトサイト3選(romptn): https://romptn.com/article/66687\n投稿サイトまとめ(illust55): https://illust55.com/7882/\n投稿サイト6選(Andup): https://andup.co.jp/media/ai/post_services/\nPromptHero: https://prompthero.com/\nLexica: https://lexica.art/\nPromptBase: https://promptbase.com/\nPromptDen: https://promptden.com/\nDeviantArt: https://www.deviantart.com/\n\n【画像→プロンプト】\nImagePrompt.org: https://imageprompt.org/image-to-prompt\nCyberLink まとめ: https://jp.cyberlink.com/blog/photoeditor/5035/generate-image-prompt\nPerfectCorp: https://www.perfectcorp.com/ja/consumer/blog/generative-AI/generate-prompts-from-image\nVidnoz 9選: https://jp.vidnoz.com/ai-solutions/image-to-prompt-generators.html\nAnifun: https://anifun.ai/image-to-prompt/"}
+    ]
+  }
+];
+document.getElementById('data').textContent = JSON.stringify(RAW);
+const DATA = JSON.parse(document.getElementById('data').textContent);
+
+const GROUP_ORDER = [
+  ['strat','全体戦略'],['x','X（旧Twitter）'],['note','note / Threads'],
+  ['site','まとめ・投稿サイト'],['tool','画像→プロンプト'],['ref','出典']
+];
+const GROUP_LABEL = Object.fromEntries(GROUP_ORDER.concat([['my','マイプロンプト']]));
+const KIND_LABEL = {cmd:'検索コマンド', tip:'コツ', tpl:'テンプレ', link:'メモ'};
+
+const LS={theme:'pv2_theme',favs:'pv2_favs',user:'pv2_user'};
+function loadJSON(k,d){try{return JSON.parse(localStorage.getItem(k))??d;}catch(e){return d;}}
+function saveJSON(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+let theme = localStorage.getItem(LS.theme) || 'light';
+let favs = new Set(loadJSON(LS.favs,[]));
+let user = loadJSON(LS.user,[]);
+let current=null, query='', kindFilter='all', favOnly=false;
+
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function hl(text){
+  const e=esc(text);
+  if(!query) return e;
+  try{return e.replace(new RegExp(reEsc(esc(query)),'gi'),m=>'<mark>'+m+'</mark>');}catch(_){return e;}
+}
+function userToBlock(e){return {head:e.head,kind:e.kind,body:e.body,desc:e.desc,url:e.url};}
+
+function sectionMatches(f){
+  if(!query) return true;
+  const q=query.toLowerCase();
+  if((f.title+' '+(f.intro||'')).toLowerCase().includes(q)) return true;
+  if((f.items||[]).some(b=>((b.head||'')+' '+(b.body||'')+' '+(b.desc||'')).toLowerCase().includes(q))) return true;
+  if((f.links||[]).some(l=>((l.title||'')+' '+(l.url||'')+' '+(l.desc||'')).toLowerCase().includes(q))) return true;
+  return false;
+}
+function blockMatches(b){
+  if(kindFilter!=='all' && b.kind!==kindFilter) return false;
+  if(!query) return true;
+  const q=query.toLowerCase();
+  return ((b.head||'')+' '+(b.body||'')+' '+(b.desc||'')).toLowerCase().includes(q);
+}
+
+function renderNav(){
+  const nav=document.getElementById('nav');
+  nav.innerHTML='';
+  const g0=document.createElement('div');g0.className='grp';g0.textContent='マイ・ツール';g0.style.color='var(--my)';
+  nav.appendChild(g0);
+  nav.appendChild(navBtn('__favs','★ お気に入り',favs.size));
+  nav.appendChild(navBtn('__user','📝 マイプロンプト',user.length));
+  nav.appendChild(navBtn('__builder','🛠 検索コマンドビルダー',''));
+  let shown=0;
+  GROUP_ORDER.forEach(([gid,glabel])=>{
+    const items=DATA.filter(f=>f.group===gid && sectionMatches(f));
+    if(!items.length) return;
+    const g=document.createElement('div');g.className='grp';g.textContent=glabel;g.style.color='var(--'+gid+')';
+    nav.appendChild(g);
+    items.forEach(f=>{shown++;const cnt=(f.items||[]).length+(f.links?f.links.length:0);nav.appendChild(navBtn(f.id,f.title,cnt));});
+  });
+  document.getElementById('hcount').textContent='全'+DATA.length+'セクション・マイ'+user.length+'件・★'+favs.size+'件';
+}
+function navBtn(id,title,cnt){
+  const btn=document.createElement('button');
+  btn.className='nav-item'+(current===id?' active':'');
+  btn.innerHTML='<span class="t">'+hl(title)+'</span>'+(cnt!==''?'<span class="c">'+cnt+'</span>':'');
+  btn.onclick=()=>{location.hash=encodeURIComponent(id);};
+  return btn;
+}
+
+let copyMap=[];
+function blockHTML(block,favKey,opts){
+  opts=opts||{};
+  const idx=copyMap.push(block.body)-1;
+  const isFav=favs.has(favKey);
+  const urlHTML=block.url?'<div class="blockurl">🔗 <a href="'+esc(block.url)+'" target="_blank" rel="noopener">'+esc(block.url)+'</a></div>':'';
+  const userBtns=opts.isUser?
+    '<button class="mini" data-edit="'+esc(opts.userId)+'">編集</button>'+
+    '<button class="mini del" data-del="'+esc(opts.userId)+'">削除</button>':'';
+  const originTag=opts.origin?'<span class="badge link">'+esc(opts.origin)+'</span>':'';
+  const isJa=block.kind!=='cmd';
+  return '<div class="block">'+
+    '<div class="block-head">'+
+      '<button class="fav'+(isFav?' on':'')+'" data-fav="'+esc(favKey)+'" title="お気に入り">'+(isFav?'★':'☆')+'</button>'+
+      '<span class="h">'+hl(block.head||'')+'</span>'+
+      '<span class="badge '+block.kind+'">'+(KIND_LABEL[block.kind]||block.kind)+'</span>'+
+      originTag+
+      '<span class="bh-spacer"></span>'+userBtns+
+      '<button class="copy" data-copy="'+idx+'">📋 コピー</button>'+
+    '</div>'+
+    (block.desc?'<div class="desc">'+hl(block.desc)+'</div>':'')+
+    '<pre class="body'+(isJa?' ja':'')+'">'+hl(block.body)+'</pre>'+
+    urlHTML+
+  '</div>';
+}
+function linksHTML(links){
+  if(!links||!links.length) return '';
+  const cards=links.filter(l=>{
+    if(!query) return true;const q=query.toLowerCase();
+    return ((l.title||'')+' '+(l.url||'')+' '+(l.desc||'')).toLowerCase().includes(q);
+  });
+  if(!cards.length) return '';
+  return '<div class="block"><div class="block-head"><span class="h">関連リンク</span><span class="badge link">リンク集</span></div><div class="links">'+
+    cards.map(l=>'<div class="link-card"><a href="'+esc(l.url)+'" target="_blank" rel="noopener">'+hl(l.title)+'</a>'+
+      (l.desc?'<div class="ld">'+hl(l.desc)+'</div>':'')+
+      '<div class="lu"><button class="copy" data-copytext="'+esc(l.url)+'">URLコピー</button></div></div>').join('')+'</div></div>';
+}
+function toolbarHTML(){
+  const kinds=[['all','すべて'],['cmd','検索コマンド'],['tip','コツ'],['tpl','テンプレ'],['link','メモ']];
+  return '<div class="toolbar">'+
+    kinds.map(([k,l])=>'<button class="chip'+(kindFilter===k?' on':'')+'" data-kind="'+k+'">'+l+'</button>').join('')+
+    '<button class="chip star'+(favOnly?' on':'')+'" data-favonly>★のみ</button>'+
+    '<span class="tb-spacer"></span>'+
+    '<button class="iconbtn" id="copyVisible">📋 表示中をまとめてコピー</button>'+
+  '</div>';
+}
+
+function resolveFav(key){
+  if(key.indexOf('u#')===0){const id=key.slice(2);const e=user.find(x=>x.id===id);if(!e)return null;
+    return {block:userToBlock(e),key,origin:GROUP_LABEL[e.group]||'マイ',isUser:true,userId:e.id};}
+  const h=key.split('#');const f=DATA.find(x=>x.id===h[0]);if(!f)return null;
+  const b=(f.items||[])[+h[1]];if(!b)return null;
+  return {block:b,key,origin:f.title.length>16?f.title.slice(0,16)+'…':f.title,isUser:false};
+}
+function renderDoc(id){
+  const m=document.getElementById('main');
+  copyMap=[];
+  if(id==='__builder'){renderBuilder(m);return;}
+  if(id==='__favs'){renderFavs(m);return;}
+  if(id==='__user'){renderUser(m);return;}
+  const f=DATA.find(x=>x.id===id);
+  if(!f){m.innerHTML='<div class="empty">左の一覧から項目を選んでください。<br>「📝 マイプロンプト」で自分のプロンプトを保存できます。</div>';return;}
+  const gl=GROUP_LABEL[f.group]||f.group;
+  let blocks=(f.items||[]).map((b,i)=>({b,key:f.id+'#'+i})).filter(o=>blockMatches(o.b)&&(!favOnly||favs.has(o.key)));
+  m.innerHTML=
+    '<div class="doc-head"><span class="doc-char" style="background:var(--'+f.group+')">'+esc(gl)+'</span>'+
+      '<h2 class="doc-title">'+hl(f.title)+'</h2></div>'+
+    (f.intro?'<div class="intro">'+hl(f.intro)+'</div>':'')+
+    toolbarHTML()+
+    (blocks.length?blocks.map(o=>blockHTML(o.b,o.key,{})).join(''):'<div class="empty" style="margin-top:6vh">条件に合う項目がありません。</div>')+
+    (favOnly||kindFilter!=='all'?'':linksHTML(f.links));
+  bindDoc(m);
+}
+function renderFavs(m){
+  const items=[...favs].map(resolveFav).filter(Boolean).filter(o=>blockMatches(o.block));
+  m.innerHTML='<div class="doc-head"><span class="doc-char" style="background:var(--star);color:#3a2c05">お気に入り</span>'+
+    '<h2 class="doc-title">★ お気に入り</h2></div>'+
+    '<div class="intro">★を付けた項目がここに集まります。よく使うコマンドやテンプレを素早く取り出せます。</div>'+
+    toolbarHTML()+
+    (items.length?items.map(o=>blockHTML(o.block,o.key,{isUser:o.isUser,userId:o.userId,origin:o.origin})).join('')
+      :'<div class="empty" style="margin-top:6vh">まだお気に入りがありません。<br>各項目の ☆ を押すと追加されます。</div>');
+  bindDoc(m);
+}
+function renderUser(m){
+  const items=user.map(e=>({e,key:'u#'+e.id})).filter(o=>blockMatches(userToBlock(o.e))&&(!favOnly||favs.has(o.key)));
+  m.innerHTML='<div class="doc-head"><span class="doc-char" style="background:var(--my)">マイプロンプト</span>'+
+    '<h2 class="doc-title">📝 マイプロンプト</h2></div>'+
+    '<div class="intro">あなたが集めたプロンプト・検索コマンドの保存場所です。ヘッダーの「＋ 追加」、または各項目を編集・削除できます。データはこのブラウザに保存され、「⬇」でバックアップ書き出しできます。</div>'+
+    '<div class="toolbar"><button class="iconbtn primary" id="addBtn2">＋ プロンプトを追加</button>'+
+      '<button class="chip star'+(favOnly?' on':'')+'" data-favonly>★のみ</button><span class="tb-spacer"></span>'+
+      (user.length?'<button class="iconbtn" id="copyVisible">📋 表示中をまとめてコピー</button>':'')+'</div>'+
+    (items.length?items.map(o=>blockHTML(userToBlock(o.e),o.key,{isUser:true,userId:o.e.id,origin:GROUP_LABEL[o.e.group]})).join('')
+      :'<div class="empty" style="margin-top:6vh">まだ保存がありません。<br>「＋ プロンプトを追加」から登録しましょう。</div>');
+  bindDoc(m);
+  const a2=m.querySelector('#addBtn2');if(a2)a2.onclick=()=>openModal();
+}
+
+function renderBuilder(m){
+  m.innerHTML='<div class="doc-head"><span class="doc-char" style="background:var(--x)">X（旧Twitter）</span>'+
+    '<h2 class="doc-title">🛠 X 検索コマンドビルダー</h2></div>'+
+    '<div class="intro">フォームを埋めると、Xの高度検索コマンドを自動生成します。そのままコピー、または「Xで検索」で新しいタブで検索できます。</div>'+
+    '<div class="builder">'+
+      '<div class="field"><label>キーワード（スペース区切り。OR で「いずれか」）</label><input type="text" id="b_kw" placeholder="例：AIイラスト OR AIart"></div>'+
+      '<div class="row">'+
+        '<div class="field"><label>最低いいね数 min_faves</label><input type="number" id="b_faves" min="0" step="50" placeholder="300"></div>'+
+        '<div class="field"><label>投稿者 from（@不要・任意）</label><input type="text" id="b_from" placeholder="username"></div>'+
+      '</div>'+
+      '<div class="row">'+
+        '<div class="field"><label>開始日 since（任意）</label><input type="date" id="b_since"></div>'+
+        '<div class="field"><label>終了日 until（任意）</label><input type="date" id="b_until"></div>'+
+      '</div>'+
+      '<div class="field"><label>オプション</label><div class="checks">'+
+        '<label><input type="checkbox" id="b_img" checked> 画像のみ filter:images</label>'+
+        '<label><input type="checkbox" id="b_ja" checked> 日本語 lang:ja</label>'+
+        '<label><input type="checkbox" id="b_nort"> RT除外 -RT</label>'+
+        '<label><input type="checkbox" id="b_norep"> リプ除外 -filter:replies</label>'+
+      '</div></div>'+
+      '<div class="builder-out">'+
+        '<div class="block" style="margin:0">'+
+          '<div class="block-head"><span class="h">生成されたコマンド</span><span class="badge cmd">検索コマンド</span>'+
+            '<span class="bh-spacer"></span>'+
+            '<button class="copy" id="b_copy">📋 コピー</button>'+
+            '<a class="iconbtn primary" id="b_open" target="_blank" rel="noopener" style="text-decoration:none">𝕏 Xで検索</a>'+
+          '</div>'+
+          '<pre class="body ja" id="b_out"></pre>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  const ids=['b_kw','b_faves','b_from','b_since','b_until','b_img','b_ja','b_nort','b_norep'];
+  ids.forEach(i=>{const el=m.querySelector('#'+i);el.addEventListener('input',updateBuilder);el.addEventListener('change',updateBuilder);});
+  m.querySelector('#b_copy').onclick=(ev)=>copy(m.querySelector('#b_out').textContent,ev.currentTarget);
+  updateBuilder();
+}
+function updateBuilder(){
+  const v=id=>document.getElementById(id);
+  const parts=[];
+  if(v('b_kw').value.trim()) parts.push(v('b_kw').value.trim());
+  if(v('b_from').value.trim()) parts.push('from:'+v('b_from').value.trim().replace(/^@/,''));
+  if(v('b_img').checked) parts.push('filter:images');
+  if(v('b_faves').value) parts.push('min_faves:'+v('b_faves').value);
+  if(v('b_ja').checked) parts.push('lang:ja');
+  if(v('b_since').value) parts.push('since:'+v('b_since').value);
+  if(v('b_until').value) parts.push('until:'+v('b_until').value);
+  if(v('b_nort').checked) parts.push('-RT');
+  if(v('b_norep').checked) parts.push('-filter:replies');
+  const cmd=parts.join(' ');
+  v('b_out').textContent=cmd||'（キーワードや条件を入力してください）';
+  v('b_open').href='https://x.com/search?q='+encodeURIComponent(cmd)+'&f=live';
+}
+
+function bindDoc(m){
+  m.querySelectorAll('[data-copy]').forEach(b=>b.onclick=(ev)=>copy(copyMap[+b.getAttribute('data-copy')],ev.currentTarget));
+  m.querySelectorAll('[data-copytext]').forEach(b=>b.onclick=(ev)=>copy(b.getAttribute('data-copytext'),ev.currentTarget));
+  m.querySelectorAll('[data-fav]').forEach(b=>b.onclick=()=>toggleFav(b.getAttribute('data-fav')));
+  m.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openModal(b.getAttribute('data-edit')));
+  m.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delUser(b.getAttribute('data-del')));
+  m.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{kindFilter=b.getAttribute('data-kind');renderDoc(current);});
+  m.querySelectorAll('[data-favonly]').forEach(b=>b.onclick=()=>{favOnly=!favOnly;renderDoc(current);});
+  const cv=m.querySelector('#copyVisible');
+  if(cv)cv.onclick=(ev)=>{const t=copyMap.filter(Boolean).join('\n\n----\n\n');copy(t||'',ev.currentTarget);};
+}
+function toggleFav(key){
+  if(favs.has(key))favs.delete(key);else favs.add(key);
+  saveJSON(LS.favs,[...favs]);
+  renderNav();renderDoc(current);
+}
+
+let editingId=null;
+function openModal(id){
+  editingId=id||null;
+  const g=v=>document.getElementById(v);
+  if(editingId){
+    const e=user.find(x=>x.id===editingId)||{};
+    g('modalTitle').textContent='プロンプトを編集';
+    g('f_head').value=e.head||'';g('f_group').value=e.group||'my';g('f_kind').value=e.kind||'cmd';
+    g('f_body').value=e.body||'';g('f_desc').value=e.desc||'';g('f_url').value=e.url||'';
+  }else{
+    g('modalTitle').textContent='プロンプトを追加';
+    g('f_head').value='';g('f_group').value='my';g('f_kind').value='cmd';g('f_body').value='';g('f_desc').value='';g('f_url').value='';
+  }
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(()=>g('f_head').focus(),30);
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+function saveModal(){
+  const g=v=>document.getElementById(v).value.trim();
+  const head=g('f_head'),body=g('f_body');
+  if(!head&&!body){toast('タイトルか本文を入力してください');return;}
+  const rec={head:head||'(無題)',group:g('f_group')||'my',kind:g('f_kind')||'cmd',body:body,desc:g('f_desc'),url:g('f_url')};
+  if(editingId){const e=user.find(x=>x.id===editingId);if(e)Object.assign(e,rec);}
+  else{rec.id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);user.unshift(rec);}
+  saveJSON(LS.user,user);closeModal();
+  if(current!=='__user')location.hash=encodeURIComponent('__user');else{renderNav();renderDoc('__user');}
+  toast(editingId?'更新しました':'保存しました');
+}
+function delUser(id){
+  const e=user.find(x=>x.id===id);
+  if(!confirm('「'+(e?e.head:'')+'」を削除しますか？'))return;
+  user=user.filter(x=>x.id!==id);favs.delete('u#'+id);
+  saveJSON(LS.user,user);saveJSON(LS.favs,[...favs]);
+  renderNav();renderDoc(current);toast('削除しました');
+}
+
+function exportData(){
+  const blob=new Blob([JSON.stringify({_app:'prompt-viewer',version:2,exported:new Date().toISOString(),favs:[...favs],user},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='プロンプト置き場_backup_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  toast('バックアップを書き出しました');
+}
+function importData(file){
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(Array.isArray(d.user)){
+        const ids=new Set(user.map(u=>u.id));
+        d.user.forEach(u=>{if(u&&u.id&&!ids.has(u.id)){user.push(u);ids.add(u.id);}else if(u&&!u.id){u.id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);user.push(u);}});
+      }
+      if(Array.isArray(d.favs)) d.favs.forEach(k=>favs.add(k));
+      saveJSON(LS.user,user);saveJSON(LS.favs,[...favs]);
+      renderNav();renderDoc(current);toast('読み込みました（マイ'+user.length+'件）');
+    }catch(e){toast('ファイルを読み込めませんでした');}
+  };
+  r.readAsText(file);
+}
+
+function copy(text,btn){
+  const ok=()=>{toast('コピーしました');if(btn&&btn.classList.contains('copy')){const o=btn.innerHTML;btn.classList.add('done');btn.innerHTML='✓ コピー済み';setTimeout(()=>{btn.classList.remove('done');btn.innerHTML=o;},1200);}};
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');ok();}catch(e){toast('コピーできませんでした');}ta.remove();};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok,fb);}else{fb();}
+}
+let toastT;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1500);}
+function applyTheme(){document.documentElement.setAttribute('data-theme',theme);document.getElementById('themeBtn').textContent=theme==='dark'?'☀️':'🌙';}
+
+function route(){
+  const id=decodeURIComponent(location.hash.slice(1));
+  current=id||null;
+  renderNav();
+  renderDoc(current);
+  if(window.innerWidth<=820) document.getElementById('nav').classList.remove('open');
+}
+
+document.getElementById('search').oninput=(e)=>{query=e.target.value.trim();renderNav();renderDoc(current);};
+document.getElementById('hamb').onclick=()=>document.getElementById('nav').classList.toggle('open');
+document.getElementById('themeBtn').onclick=()=>{theme=theme==='dark'?'light':'dark';localStorage.setItem(LS.theme,theme);applyTheme();};
+document.getElementById('addBtn').onclick=()=>openModal();
+document.getElementById('exportBtn').onclick=exportData;
+document.getElementById('importBtn').onclick=()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange=(e)=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value='';};
+document.getElementById('modalCancel').onclick=closeModal;
+document.getElementById('modalSave').onclick=saveModal;
+document.getElementById('overlay').onclick=(e)=>{if(e.target.id==='overlay')closeModal();};
+document.addEventListener('keydown',(e)=>{
+  const t=document.activeElement.tagName;
+  if(e.key==='/'&&t!=='INPUT'&&t!=='TEXTAREA'&&t!=='SELECT'){e.preventDefault();document.getElementById('search').focus();}
+  if(e.key==='Escape')closeModal();
+});
+window.addEventListener('hashchange',route);
+
+applyTheme();
+if(!location.hash) location.hash=encodeURIComponent('overview');
+route();
+</script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="day">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プロンプト書庫｜AIイラスト 完成プロンプト蔵書</title>
+<style>
+  :root{
+    --wood1:#6b4327; --wood2:#5a3620; --wood-edge:#3f2615; --board:#7a4e2c; --board-sh:rgba(0,0,0,.45);
+    --paper:#f3ead7; --paper2:#ece0c8; --ink:#33291c; --sub:#7a6b52; --line:#d8c9a8;
+    --gold:#b08a3e; --accent:#8a5a2b; --accent-ink:#fff;
+    --card:#fbf5e6; --code-bg:#fdf9ee; --code-ink:#3a2f1f; --chk:#8a5a2b;
+    --shadow:rgba(0,0,0,.3); --star:#c9952a; --ok:#3f7a4e;
+    --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP",serif;
+    --sans:"Hiragino Kaku Gothic ProN","Yu Gothic","Meiryo",sans-serif;
+  }
+  html[data-theme="night"]{
+    --wood1:#2c2017; --wood2:#231a12; --wood-edge:#15100a; --board:#3a2a1b; --board-sh:rgba(0,0,0,.7);
+    --paper:#211b14; --paper2:#1a150f; --ink:#e7dcc6; --sub:#a8977a; --line:#3f3324;
+    --gold:#c9a85a; --accent:#caa063; --accent-ink:#1c150d;
+    --card:#241d15; --code-bg:#1b1610; --code-ink:#d9ccb2; --chk:#caa063;
+    --shadow:rgba(0,0,0,.6); --star:#e0b94e; --ok:#6db77f;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{font-family:var(--sans);color:var(--ink);min-width:0;
+    background:repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 2px,transparent 2px 7px),linear-gradient(180deg,var(--wood1),var(--wood2));
+    background-attachment:fixed;}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px;}
+  header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,rgba(0,0,0,.34),rgba(0,0,0,.15));
+    backdrop-filter:blur(4px);border-bottom:1px solid var(--wood-edge);
+    display:flex;align-items:center;gap:10px;padding:10px 18px;flex-wrap:wrap;color:#f6ecd6;}
+  header h1{font-family:var(--serif);font-size:18px;margin:0;font-weight:700;letter-spacing:.06em;
+    text-shadow:0 1px 2px rgba(0,0,0,.5);white-space:nowrap;cursor:pointer;background:none;border:none;color:inherit;}
+  header .meta{font-size:11.5px;opacity:.82;}
+  .spacer{flex:1;}
+  .search{position:relative;}
+  .search input{width:210px;max-width:42vw;padding:7px 12px 7px 32px;border:1px solid var(--wood-edge);
+    border-radius:999px;font-size:13px;background:rgba(255,250,240,.92);color:#33291c;font-family:var(--sans);}
+  .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.5;}
+  .navbtn{border:1px solid var(--wood-edge);background:rgba(255,250,240,.16);color:#f6ecd6;border-radius:8px;
+    padding:7px 12px;font-size:13px;cursor:pointer;white-space:nowrap;font-family:var(--sans);min-height:34px;}
+  .navbtn:hover{background:rgba(255,250,240,.30);}
+
+  main{max-width:1080px;margin:0 auto;padding:24px 20px 90px;min-width:0;overflow-x:hidden;}
+
+  /* breadcrumb */
+  .crumbs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;color:#efe3c9;font-size:12.5px;}
+  .crumbs a{color:#f3e7cf;text-decoration:none;cursor:pointer;opacity:.9;}
+  .crumbs a:hover{text-decoration:underline;}
+  .crumbs .sep{opacity:.5;}
+  .crumbs .cur{font-family:var(--serif);opacity:.95;}
+
+  /* ===== bookshelf ===== */
+  .shelf-intro{font-family:var(--serif);color:#f3e7cf;text-align:center;margin:4px 0 24px;}
+  .shelf-intro .t{font-size:25px;letter-spacing:.08em;text-shadow:0 2px 4px rgba(0,0,0,.5);}
+  .shelf-intro .s{font-size:12.5px;opacity:.82;margin-top:8px;letter-spacing:.03em;line-height:1.7;}
+  .shelf{position:relative;margin:0 0 26px;padding:0 10px 22px;}
+  .shelf-row{display:flex;flex-wrap:nowrap;align-items:flex-end;justify-content:center;gap:10px;min-height:230px;}
+  .shelf::after{content:"";position:absolute;left:0;right:0;bottom:0;height:20px;
+    background:linear-gradient(180deg,var(--board),var(--wood-edge));border-radius:3px;
+    box-shadow:0 12px 16px -6px var(--board-sh),inset 0 2px 0 rgba(255,255,255,.12);}
+  .spine{position:relative;width:52px;height:214px;border-radius:4px 4px 2px 2px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:12px 4px;
+    color:#f7eedd;flex-shrink:0;border:none;
+    box-shadow:inset 3px 0 5px rgba(255,255,255,.18),inset -4px 0 7px rgba(0,0,0,.4),3px 4px 9px rgba(0,0,0,.4);
+    transition:transform .16s ease;}
+  .spine:hover,.spine:focus-visible{transform:translateY(-13px);}
+  .spine .no{font-family:var(--serif);font-size:10px;letter-spacing:.1em;opacity:.92;
+    border:1px solid rgba(255,255,255,.4);border-radius:3px;padding:2px 3px;writing-mode:vertical-rl;}
+  .spine .ttl{writing-mode:vertical-rl;text-orientation:upright;font-family:var(--serif);font-weight:700;
+    font-size:16px;letter-spacing:.12em;line-height:1.1;flex:1;display:flex;align-items:center;margin:8px 0;
+    overflow:hidden;text-shadow:0 1px 2px rgba(0,0,0,.4);}
+  .spine .cnt{font-size:9px;opacity:.85;background:rgba(0,0,0,.28);border-radius:999px;padding:2px 6px;}
+  .spine .band{position:absolute;left:0;right:0;height:6px;background:rgba(0,0,0,.22);}
+  .spine .band.top{top:32px;}.spine .band.bot{bottom:28px;}
+  .spine.book-fav{background:linear-gradient(90deg,#7a5a18,#a07b2b 18%,#8a6a22 50%,#a07b2b 82%,#5e470f);}
+
+  /* ===== open book ===== */
+  .book{background:linear-gradient(180deg,var(--paper),var(--paper2));border-radius:8px;
+    box-shadow:0 20px 50px -12px var(--shadow);overflow:hidden;border:1px solid var(--line);min-width:0;}
+  .book-top{padding:26px 32px 20px;border-bottom:2px solid var(--line);
+    background:repeating-linear-gradient(90deg,transparent 0 38px,rgba(176,138,62,.05) 38px 39px);}
+  .book-no{font-family:var(--serif);color:var(--gold);font-size:12.5px;letter-spacing:.18em;}
+  .book-title{font-family:var(--serif);font-size:28px;font-weight:800;margin:6px 0 0;letter-spacing:.05em;color:var(--ink);word-break:break-word;}
+  .book-preface{font-family:var(--serif);font-size:13px;line-height:1.95;color:var(--sub);margin:12px 0 0;max-width:740px;white-space:pre-wrap;}
+
+  .pages{padding:22px 26px 30px;min-width:0;}
+  .entry{background:var(--card);border:1px solid var(--line);border-radius:11px;margin-bottom:16px;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);overflow:hidden;min-width:0;}
+  .entry-head{display:flex;align-items:center;gap:10px;padding:13px 16px;flex-wrap:wrap;cursor:pointer;}
+  .entry-head:hover{background:rgba(176,138,62,.06);}
+  .entry-no{font-family:var(--serif);color:var(--gold);font-size:12px;letter-spacing:.1em;min-width:38px;}
+  .entry-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);word-break:break-word;}
+  .tag{font-size:10px;color:var(--sub);background:rgba(176,138,62,.13);border:1px solid var(--line);
+    border-radius:999px;padding:2px 8px;font-family:var(--sans);}
+  .eh-spacer{flex:1;min-width:8px;}
+  .chev{color:var(--sub);font-size:13px;transition:transform .18s;}
+  .entry.open .chev{transform:rotate(90deg);}
+  .bookmark{border:1px solid var(--line);background:var(--card);color:var(--sub);border-radius:7px;
+    padding:5px 9px;font-size:13px;cursor:pointer;line-height:1;min-height:32px;}
+  .bookmark:hover{border-color:var(--star);color:var(--star);}
+  .bookmark.on{background:var(--star);border-color:var(--star);color:#3a2c05;}
+
+  .entry-body{padding:0 16px;max-height:0;overflow:hidden;transition:max-height .25s ease, padding .25s ease;}
+  .entry.open .entry-body{max-height:2600px;padding:4px 16px 18px;}
+  .sect{margin:14px 0 0;}
+  .sect-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 7px;}
+  .sect-h .lb{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.07em;font-family:var(--sans);}
+  .sect-h .sp{flex:1;}
+  pre.prompt{margin:0;padding:13px 15px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+    line-height:1.7;white-space:pre-wrap;word-break:break-word;color:var(--code-ink);background:var(--code-bg);
+    border:1px solid var(--line);border-radius:8px;min-width:0;}
+  pre.prompt.neg{color:#9a4630;}
+  html[data-theme="night"] pre.prompt.neg{color:#e2916f;}
+  pre.set{font-family:var(--sans);font-size:11.5px;color:var(--sub);background:transparent;border:1px dashed var(--line);}
+
+  .partlist{display:flex;flex-direction:column;gap:7px;}
+  .part{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border:1px solid var(--line);
+    border-radius:8px;background:var(--code-bg);cursor:pointer;min-width:0;}
+  .part:hover{border-color:var(--chk);}
+  .part input{margin:2px 0 0;width:16px;height:16px;accent-color:var(--chk);flex-shrink:0;cursor:pointer;}
+  .part .pl{font-size:11px;font-weight:700;color:var(--accent);font-family:var(--sans);
+    min-width:48px;padding-top:1px;flex-shrink:0;}
+  .part code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--code-ink);
+    word-break:break-word;min-width:0;}
+  .part.off{opacity:.42;}
+  .part.off code{text-decoration:line-through;}
+
+  .btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:7px;
+    padding:6px 13px;font-size:12.5px;cursor:pointer;font-family:var(--sans);font-weight:700;min-height:32px;}
+  .btn:hover{filter:brightness(1.07);}
+  .btn.done{background:var(--ok);border-color:var(--ok);color:#fff;}
+  .btn.ghost{background:transparent;color:var(--accent);}
+  .btn.tiny{padding:4px 10px;font-size:11.5px;font-weight:600;}
+  .btn.ghost.tiny{border-color:var(--line);color:var(--sub);}
+
+  mark{background:var(--star);color:#3a2c05;border-radius:3px;padding:0 1px;}
+  .empty{font-family:var(--serif);color:#efe3cb;text-align:center;margin-top:12vh;font-size:16px;line-height:2.1;}
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:#2c2017;
+    color:#f3e7cf;padding:11px 20px;border-radius:999px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;
+    z-index:80;font-family:var(--serif);letter-spacing:.05em;border:1px solid var(--gold);}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (max-width:680px){
+    main{padding:16px 12px 80px;}
+    .book-top,.pages{padding-left:16px;padding-right:16px;}
+    .book-title{font-size:23px;}
+    .shelf-row{gap:8px;min-height:204px;}
+    .spine{width:44px;height:188px;}
+    .spine .ttl{font-size:15px;}
+  }
+  @media (max-width:380px){
+    .shelf-row{gap:6px;}
+    .spine{width:40px;height:176px;}
+    .spine .ttl{font-size:14px;letter-spacing:.08em;}
+    .search input{width:150px;}
+  }
+
+  /* ===== asset / mode (v3) ===== */
+  .modetabs{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 2px;}
+  .modetabs button{border:1px solid var(--line);background:var(--code-bg);color:var(--sub);border-radius:999px;
+    padding:6px 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--sans);min-height:32px;}
+  .modetabs button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);}
+  .modetabs .mode-note{font-size:11px;color:var(--sub);}
+  .asset{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin:12px 0 0;}
+  .asset-img{width:200px;flex-shrink:0;}
+  .asset-frame{width:200px;min-height:248px;border:2px dashed var(--line);border-radius:10px;background:var(--code-bg);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:var(--sub);
+    font-family:var(--serif);font-size:12.5px;text-align:center;padding:10px;overflow:hidden;}
+  .asset-frame:hover{border-color:var(--accent);color:var(--accent);}
+  .asset-frame .ico{font-size:28px;opacity:.7;line-height:1;}
+  .asset-frame.filled{border-style:solid;padding:0;min-height:0;cursor:default;}
+  .asset-frame.filled:hover{border-color:var(--line);color:var(--sub);}
+  .asset-frame img{width:100%;max-height:360px;object-fit:contain;display:block;}
+  .asset-actions{display:flex;gap:6px;margin-top:7px;justify-content:center;}
+  .asset-main{flex:1;min-width:240px;}
+  @media (max-width:560px){.asset-img,.asset-frame{width:100%;}}
+</style>
+</head>
+<body>
+<header>
+  <button class="h1btn" id="home"><span style="font-family:var(--serif);font-size:18px;font-weight:700">📖 プロンプト書庫</span></button>
+  <span class="meta" id="hmeta"></span>
+  <div class="spacer"></div>
+  <div class="search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="search" type="search" placeholder="蔵書を検索 ( / )" aria-label="蔵書を検索">
+  </div>
+  <button class="navbtn" id="shelfBtn">本棚へ</button>
+  <button class="navbtn" id="themeBtn" title="昼/夜" aria-label="昼夜の切り替え">🌙</button>
+</header>
+<main id="main"></main>
+<input type="file" id="assetFile" accept="image/*" style="display:none">
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script id="data" type="application/json"></script>
+<script>
+const NEG = {
+  std:"lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, ((extra fingers)), ((fused fingers)), cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, text, error",
+  real:"(worst quality, low quality:1.4), deformed, ugly, bad proportions, cloned face, gross proportions, mutation, extra arms, extra legs, disfigured, plastic skin, overexposed, lowres, bad anatomy, bad hands, missing fingers, watermark, signature",
+  anime:"3d, realistic, photorealistic, bad anatomy, extra fingers, fused fingers, blurry, lowres, jpeg artifacts, watermark, signature, sketch, monochrome, worst quality, low quality, bad hands"
+};
+const SET = {
+  portrait:"Size 832x1216 (縦) / Sampler DPM++ 2M Karras / Steps 28 / CFG 7 / Hires.fix x1.5 (4x-UltraSharp, denoise 0.4) / Clip skip 2",
+  land:"Size 1216x832 (横) / Sampler DPM++ 2M Karras / Steps 28 / CFG 7 / Hires.fix x1.5 (4x-UltraSharp, denoise 0.4) / Clip skip 2",
+  sheet:"Size 1216x1216 (シート向き) / Sampler DPM++ 2M Karras / Steps 30 / CFG 7 / Hires.fix x1.5 (4x-UltraSharp, denoise 0.4) / Clip skip 2"
+};
+const SHEET = "multiple views, reference sheet, character sheet, multiple poses, different angles, same character, consistent design, 2x2 grid, white background";
+const VOLUMES = [
+  {id:"v1",no:"第一巻",title:"立ち絵",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#16403e,#1f5e5b 20%,#1a4f4c 50%,#1f5e5b 80%,#123532)",
+   preface:"キャラクターを正面から描き出す、肖像の巻。要素のチェックを外せば、髪・瞳・衣装だけを差し替える土台としても使える。",
+   entries:[
+     {title:"正面バストアップ・自然光",tags:["ポートレート","自然光"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed, 8k"},
+       {l:"構図",t:"1girl, solo, upper body, looking at viewer"},
+       {l:"髪",t:"long black hair, hime cut"},
+       {l:"瞳",t:"dark brown eyes"},
+       {l:"表情",t:"soft gentle smile"},
+       {l:"衣装",t:"white blouse"},
+       {l:"光",t:"soft natural lighting"},
+       {l:"背景",t:"simple background"},
+       {l:"効果",t:"depth of field, bokeh"}]},
+     {title:"全身立ち絵・無地背景",tags:["全身","資料用"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"構図",t:"1girl, solo, full body, standing, looking at viewer, full body shot"},
+       {l:"容姿",t:"detailed face, twintails"},
+       {l:"衣装",t:"school uniform"},
+       {l:"背景",t:"plain background"},
+       {l:"光",t:"soft shadow"},
+       {l:"構成",t:"centered composition"}]},
+     {title:"三面図風キャラクターシート",tags:["設定資料","三面図"],parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"構図",t:"character sheet, reference sheet, 1girl, multiple views, front view, side view, back view, full body"},
+       {l:"ポーズ",t:"neutral pose"},
+       {l:"背景",t:"plain white background"},
+       {l:"線画",t:"consistent character design, clean lineart"}]},
+     {title:"接写・瞳の作画",tags:["クローズアップ","瞳"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"構図",t:"close-up, face focus, 1girl"},
+       {l:"瞳",t:"beautiful detailed eyes"},
+       {l:"容姿",t:"glossy lips, light blush"},
+       {l:"光",t:"soft rim light"},
+       {l:"効果",t:"shallow depth of field, highly detailed skin"}]},
+     {title:"逆光ポートレート",tags:["ポートレート","逆光"],parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"構図",t:"1girl, solo, upper body"},
+       {l:"光",t:"backlighting, rim light, glowing edge"},
+       {l:"動き",t:"wind, floating hair"},
+       {l:"効果",t:"cinematic, dramatic lighting, soft focus background, lens flare"}]}
+   ]},
+  {id:"v2",no:"第二巻",title:"表情",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#5c2029,#7a2f3a 20%,#682832 50%,#7a2f3a 80%,#481922)",
+   preface:"心の機微を顔に乗せる、感情の巻。表情パートだけを他の頁に移植する使い方も効く。",
+   entries:[
+     {title:"満面の笑み",tags:["笑顔","明るい"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"表情",t:"bright smile, open mouth, happy, sparkling eyes, light blush, cheerful expression"},
+       {l:"視線",t:"looking at viewer"},
+       {l:"光",t:"warm lighting"}]},
+     {title:"涙・憂い",tags:["泣き","切ない"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"表情",t:"teary eyes, crying, sad expression, downcast eyes, trembling, melancholic mood"},
+       {l:"光",t:"soft diffused lighting"}]},
+     {title:"怒り・凛",tags:["怒り","凛々しい"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"表情",t:"angry, frown, sharp eyes, determined expression, clenched teeth, intense gaze"},
+       {l:"光",t:"dramatic lighting"}]},
+     {title:"照れ・恥じらい",tags:["照れ","可愛い"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"表情",t:"embarrassed, heavy blush, shy, looking away, fidgeting, cute expression"},
+       {l:"光",t:"soft lighting"}]},
+     {title:"クール・無表情",tags:["クール","静"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"表情",t:"expressionless, calm, half-closed eyes, cool, stoic"},
+       {l:"視線",t:"looking at viewer"},
+       {l:"雰囲気",t:"refined atmosphere"}]}
+   ]},
+  {id:"v3",no:"第三巻",title:"動勢",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#7a4419,#9a5a2a 20%,#854c22 50%,#9a5a2a 80%,#603513)",
+   preface:"止まった絵に風を通す、躍動の巻。ポーズと効果を切り分けてあるので、勢いだけを足し引きできる。",
+   entries:[
+     {title:"疾走・ダイナミック",tags:["走る","躍動"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"ポーズ",t:"running, dynamic pose"},
+       {l:"効果",t:"motion blur, action lines, dramatic angle, flowing hair, dust, sense of speed"}]},
+     {title:"斬撃・剣戟",tags:["戦闘","剣"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"ポーズ",t:"holding sword, slashing pose, mid-swing"},
+       {l:"効果",t:"motion lines, sparks, dynamic action, battle scene"}]},
+     {title:"振り向き",tags:["振り向き","髪なびき"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"ポーズ",t:"looking back, turning around, over the shoulder, from behind"},
+       {l:"動き",t:"flowing hair, dynamic pose"}]},
+     {title:"体育座り・くつろぎ",tags:["座り","日常"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"ポーズ",t:"sitting, knees up, hugging knees"},
+       {l:"雰囲気",t:"relaxed, on the floor, casual atmosphere"},
+       {l:"光",t:"soft lighting"}]},
+     {title:"跳躍・浮遊",tags:["ジャンプ","浮遊"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"ポーズ",t:"jumping, floating, mid-air, dynamic pose"},
+       {l:"動き",t:"flowing clothes, weightless"},
+       {l:"背景",t:"blue sky"}]}
+   ]},
+  {id:"v4",no:"第四巻",title:"衣裳",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#46295a,#5e3a6e 20%,#4f3160 50%,#5e3a6e 80%,#371f48)",
+   preface:"布をまとわせ役を与える、衣裳の巻。衣装パートだけを抜き出して他の構図に貼ると着せ替えになる。",
+   entries:[
+     {title:"セーラー制服",tags:["制服","学園"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"衣装",t:"serafuku, sailor uniform, pleated skirt, ribbon, knee socks, school uniform"},
+       {l:"仕上",t:"clean design"}]},
+     {title:"ゴシックロリータ",tags:["ゴスロリ","華美"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"衣装",t:"gothic lolita, frilled dress, lace, ribbons, black and white dress"},
+       {l:"雰囲気",t:"elegant, ornate, detailed costume"}]},
+     {title:"和装・着物",tags:["和装","着物"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"衣装",t:"kimono, japanese clothes, floral pattern, obi"},
+       {l:"装飾",t:"hair ornament"},
+       {l:"雰囲気",t:"traditional, elegant, detailed fabric"}]},
+     {title:"ファンタジー鎧",tags:["鎧","幻想"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"衣装",t:"ornate armor, fantasy knight, pauldrons, cape"},
+       {l:"質感",t:"intricate details, polished metal"},
+       {l:"雰囲気",t:"fantasy design"}]},
+     {title:"私服・カジュアル",tags:["私服","現代"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"衣装",t:"casual clothes, hoodie, denim shorts, sneakers"},
+       {l:"雰囲気",t:"street fashion, modern, relaxed style"}]}
+   ]},
+  {id:"v5",no:"第五巻",title:"画風",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#264b22,#355e2e 20%,#2c5026 50%,#355e2e 80%,#1d3a1a)",
+   preface:"同じ題材を別の筆で。画風の巻。画風パートだけを他の頁へ足すと仕上がりの質感が変わる。",
+   entries:[
+     {title:"透明水彩",tags:["水彩","淡い"],parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"画風",t:"watercolor (medium), watercolor painting, soft colors, paper texture, gentle gradients, traditional media, light and airy"}]},
+     {title:"厚塗り",tags:["厚塗り","重厚"],neg:"real",parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"画風",t:"impasto, thick paint, painterly, detailed rendering, semi-realistic, rich colors, digital painting"}]},
+     {title:"セルルック・アニメ塗り",tags:["アニメ","セル"],neg:"anime",parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"画風",t:"anime style, cel shading, flat colors, clean lineart, vibrant, crisp shadows, anime screencap"}]},
+     {title:"鉛筆スケッチ",tags:["線画","モノクロ"],parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"画風",t:"pencil sketch, monochrome, graphite, sketchy lines, rough lines, traditional media, line art"}]},
+     {title:"リアル系イラスト",tags:["写実","高精細"],neg:"real",parts:[
+       {l:"品質",t:"masterpiece, best quality"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"画風",t:"semi-realistic, realistic, detailed skin texture, subsurface scattering, photorealistic lighting, highly detailed"}]}
+   ]},
+  {id:"v6",no:"第六巻",title:"構図",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#21305a,#2b3f6e 20%,#24365e 50%,#2b3f6e 80%,#172242)",
+   preface:"どこから、どう切り取るか。構図の巻。視点パートを差し替えれば同じ題材の見え方を変えられる。",
+   entries:[
+     {title:"ローアングル煽り",tags:["煽り","迫力"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"視点",t:"from below, low angle, looking up, dramatic perspective, dynamic, towering composition"}]},
+     {title:"俯瞰ハイアングル",tags:["俯瞰","見下ろし"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"視点",t:"from above, high angle, looking down, overhead view, dynamic composition"}]},
+     {title:"三分割・余白",tags:["三分割","余白"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"構図",t:"rule of thirds, off-center composition, negative space, balanced, cinematic framing"}]},
+     {title:"魚眼・広角",tags:["広角","歪み"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"視点",t:"fisheye lens, wide angle, distorted perspective, dynamic, exaggerated foreground"}]},
+     {title:"斜め構図（ダッチアングル）",tags:["斜め","不安定"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"視点",t:"dutch angle, tilted frame, diagonal composition, dynamic, dramatic mood"}]}
+   ]},
+  {id:"v7",no:"第七巻",title:"光影",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#7a6318,#9a7d1f 20%,#866c1a 50%,#9a7d1f 80%,#5f4d12)",
+   preface:"絵に時刻と空気を与える、光と影の巻。光パートだけを既存の頁へ重ねると雰囲気が一変する。",
+   entries:[
+     {title:"ゴールデンアワー",tags:["夕陽","暖色"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"光",t:"golden hour, warm sunlight, sunset, long shadows, soft glow, lens flare, atmospheric"}]},
+     {title:"キアロスクーロ",tags:["明暗","劇的"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"光",t:"chiaroscuro, dramatic lighting, strong contrast, deep shadows, single light source, moody, rim light"}]},
+     {title:"木漏れ日",tags:["木漏れ日","柔光"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"光",t:"dappled sunlight, light through leaves, forest light, soft rays, god rays, gentle atmosphere"}]},
+     {title:"ネオン夜景",tags:["ネオン","夜"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"光",t:"neon lights, night, glowing, cyberpunk lighting, colorful reflections, bokeh, moody"}]},
+     {title:"朝の柔らか光",tags:["朝","淡光"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"光",t:"soft morning light, diffused light, pastel tones, serene, hazy atmosphere"}]}
+   ]},
+  {id:"v8",no:"第八巻",title:"情景",neg:"std",set:"land",
+   color:"linear-gradient(90deg,#34474f,#3f5560 20%,#374a53 50%,#3f5560 80%,#27353c)",
+   preface:"人物の立つ場所を描く、背景・情景の巻。背景パートを差し替えれば同じキャラを別の舞台に立たせられる。",
+   entries:[
+     {title:"夕暮れの教室",tags:["教室","郷愁"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"背景",t:"classroom, empty desks, window, detailed background"},
+       {l:"光",t:"sunset, golden light, warm tones"},
+       {l:"雰囲気",t:"nostalgic"}]},
+     {title:"桜並木",tags:["桜","春"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"背景",t:"cherry blossoms, sakura, path, scenic, detailed background"},
+       {l:"効果",t:"falling petals"},
+       {l:"季節",t:"spring, pink"}]},
+     {title:"海辺・夏",tags:["海","夏"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"背景",t:"beach, ocean, waves, scenic background"},
+       {l:"空",t:"blue sky, clouds"},
+       {l:"雰囲気",t:"summer, bright"}]},
+     {title:"雨の街",tags:["雨","都市"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"背景",t:"rainy city, wet street, reflections, detailed background"},
+       {l:"小物",t:"umbrella"},
+       {l:"光",t:"neon"},
+       {l:"雰囲気",t:"moody, cinematic"}]},
+     {title:"星空の丘",tags:["星空","夜"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl, solo"},
+       {l:"背景",t:"starry sky, milky way, hill, silhouette, scenic"},
+       {l:"時",t:"night"},
+       {l:"雰囲気",t:"vast, atmospheric"}]}
+   ]},
+  {id:"v9",no:"第九巻",title:"世界",neg:"std",set:"land",
+   color:"linear-gradient(90deg,#4f4b18,#5e5a1f 20%,#524e1a 50%,#5e5a1f 80%,#3a3711)",
+   preface:"舞台そのものを立ち上げる、世界観の巻。世界パートを軸に、衣裳・光の巻と組み合わせると一枚絵になる。",
+   entries:[
+     {title:"ハイファンタジー",tags:["幻想","壮大"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl"},
+       {l:"世界",t:"high fantasy, magic, floating islands, ancient ruins, epic scenery, detailed background"},
+       {l:"雰囲気",t:"ethereal"}]},
+     {title:"サイバーパンク都市",tags:["電脳","SF"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl"},
+       {l:"世界",t:"cyberpunk, futuristic city, neon, holograms, detailed background, sci-fi"},
+       {l:"雰囲気",t:"dystopian, rain"}]},
+     {title:"和風幻想",tags:["和風","幽玄"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl"},
+       {l:"世界",t:"japanese fantasy, torii gate, spirits, lanterns"},
+       {l:"雰囲気",t:"mystical, traditional, atmospheric"}]},
+     {title:"スチームパンク",tags:["蒸気","機械"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl"},
+       {l:"世界",t:"steampunk, gears, brass, airship, victorian, intricate machinery"},
+       {l:"色",t:"sepia tones"}]},
+     {title:"ポストアポカリプス",tags:["終末","廃墟"],parts:[
+       {l:"品質",t:"masterpiece, best quality, ultra-detailed"},
+       {l:"主体",t:"1girl"},
+       {l:"世界",t:"post-apocalyptic, ruins, overgrown, abandoned city, detailed background"},
+       {l:"雰囲気",t:"desolate, atmospheric"}]}
+   ]},
+  {id:"v10",no:"第十巻",title:"除去",neg:"std",set:"portrait",
+   color:"linear-gradient(90deg,#48342a,#5a4030 20%,#4d382c 50%,#5a4030 80%,#352620)",
+   preface:"描かぬものを定める、ネガティブの巻。完成版の仕上げに添える定番の呪。各頁はそのままネガティブ欄へ写せる。",
+   entries:[
+     {title:"万能ネガティブ",tags:["定番","汎用"],negbody:"lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, ((extra fingers)), ((fused fingers)), cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry, text, error"},
+     {title:"顔・手の崩れ対策",tags:["崩れ","手"],negbody:"bad anatomy, deformed, disfigured, mutated hands, malformed limbs, extra limbs, extra fingers, fused fingers, long neck, poorly drawn face, poorly drawn hands, cross-eyed"},
+     {title:"リアル系向け",tags:["写実","強"],negbody:"(worst quality, low quality:1.4), deformed, ugly, bad proportions, cloned face, gross proportions, mutation, extra arms, extra legs, disfigured, plastic skin, overexposed"},
+     {title:"余計な要素の除去",tags:["要素除去"],negbody:"multiple views, text, logo, watermark, signature, border, frame, jpeg artifacts, censored, speech bubble, english text"},
+     {title:"アニメ塗り向け",tags:["アニメ"],negbody:"3d, realistic, photorealistic, ugly, bad anatomy, extra fingers, blurry, lowres, jpeg artifacts, watermark, signature, sketch, monochrome"}
+   ]}
+];
+const DATA = VOLUMES;
+document.getElementById('data').textContent = JSON.stringify({NEG,SET,SHEET,VOLUMES});
+
+const LS={theme:'shelf2_theme', marks:'shelf2_marks'};
+let theme = localStorage.getItem(LS.theme) || 'day';
+let marks = new Set((()=>{try{return JSON.parse(localStorage.getItem(LS.marks))||[];}catch(e){return [];}})());
+let query='';
+let view='shelf';
+const openKeys=new Set();
+const checkStore={};
+const assetMode={};
+let pendingKey=null, pendingFrame=null;
+
+/* ---- storage (IndexedDB with memory fallback) ---- */
+const hasIDB = !!window.indexedDB;
+const MEM={};
+let _db=null;
+function idb(){return new Promise((res,rej)=>{if(_db)return res(_db);
+  const r=indexedDB.open('shelf_assets',1);
+  r.onupgradeneeded=()=>{r.result.createObjectStore('img');};
+  r.onsuccess=()=>{_db=r.result;res(_db);};r.onerror=()=>rej(r.error);});}
+function storeGet(k){if(!hasIDB)return Promise.resolve(MEM[k]||null);
+  return idb().then(db=>new Promise(res=>{const t=db.transaction('img').objectStore('img').get(k);t.onsuccess=()=>res(t.result||null);t.onerror=()=>res(null);})).catch(()=>null);}
+function storePut(k,b){if(!hasIDB){MEM[k]=b;return Promise.resolve();}
+  return idb().then(db=>new Promise((res,rej)=>{const tx=db.transaction('img','readwrite');tx.objectStore('img').put(b,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);}));}
+function storeDel(k){if(!hasIDB){delete MEM[k];return Promise.resolve();}
+  return idb().then(db=>new Promise(res=>{const tx=db.transaction('img','readwrite');tx.objectStore('img').delete(k);tx.oncomplete=()=>res();tx.onerror=()=>res();})).catch(()=>{});}
+
+/* ---- helpers ---- */
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function hl(t){const e=esc(t);if(!query)return e;try{return e.replace(new RegExp(reEsc(esc(query)),'gi'),m=>'<mark>'+m+'</mark>');}catch(_){return e;}}
+function kanji(n){const k=['零','一','二','三','四','五','六','七','八','九','十'];return n<=10?k[n]:String(n);}
+function volById(id){return DATA.find(v=>v.id===id);}
+function eKey(v,i){return v.id+'#'+i;}
+function negText(v,e){return NEG[(e&&e.neg)||v.neg]||NEG.std;}
+function setText(v,e){return SET[(e&&e.set)||v.set]||SET.portrait;}
+function modeParts(e,mode){return mode==='integ'?(e.parts||[]).concat([{l:"シート",t:SHEET}]):(e.parts||[]);}
+function modeNeg(v,e,mode){return mode==='integ'?negText(v,e)+', inconsistent design, different person':negText(v,e);}
+function modeSet(v,e,mode){return mode==='integ'?SET.sheet:setText(v,e);}
+function fullPosMode(e,mode){return modeParts(e,mode).map(p=>p.t).join(', ');}
+function completeTextMode(v,e,mode){return fullPosMode(e,mode)+'\n\nNegative prompt: '+modeNeg(v,e,mode)+'\n\n推奨設定: '+modeSet(v,e,mode);}
+function selTextMode(e,ckKey,mode){const ck=checkStore[ckKey];return modeParts(e,mode).filter((p,i)=>!ck||ck[i]!==false).map(p=>p.t).join(', ');}
+function entryMatch(e,v){if(!query)return true;const q=query.toLowerCase();
+  const body=(e.parts?e.parts.map(p=>p.l+' '+p.t).join(' '):e.negbody||'');
+  return (e.title+' '+(e.tags||[]).join(' ')+' '+body+' '+v.title+' '+v.no).toLowerCase().includes(q);}
+function totalEntries(){return DATA.reduce((a,v)=>a+v.entries.length,0);}
+function crumbs(cur){return '<div class="crumbs"><a data-home>本棚</a>'+(cur?'<span class="sep">›</span><span class="cur">'+esc(cur)+'</span>':'')+'</div>';}
+
+/* ---- shelf ---- */
+function spineHTML(v){return '<button class="spine" data-open="'+v.id+'" style="background:'+v.color+'" aria-label="'+esc(v.no+' '+v.title)+'を開く">'+
+  '<span class="band top"></span><span class="band bot"></span><span class="no">'+esc(v.no)+'</span>'+
+  '<span class="ttl">'+esc(v.title)+'</span><span class="cnt">'+v.entries.length+'</span></button>';}
+function favSpineHTML(){return '<button class="spine book-fav" data-open="__marks" aria-label="お気に入りを開く">'+
+  '<span class="band top"></span><span class="band bot"></span><span class="no">栞</span>'+
+  '<span class="ttl">お気に入り</span><span class="cnt">'+marks.size+'</span></button>';}
+function renderShelf(){
+  view='shelf';
+  const spines=DATA.map(spineHTML);if(marks.size)spines.push(favSpineHTML());
+  let rows='';for(let i=0;i<spines.length;i+=6){rows+='<div class="shelf"><div class="shelf-row">'+spines.slice(i,i+6).join('')+'</div></div>';}
+  document.getElementById('main').innerHTML=crumbs('')+
+    '<div class="shelf-intro"><div class="t">完成プロンプト蔵書</div>'+
+    '<div class="s">巻を開くと、各頁に〈個別版／統合版〉のタブと完成アセット枠（完成版プロンプト＋見本イラスト）が並びます。<br>見本の空枠はクリックで画像をアップロードできます（ブラウザ内に保存）。</div></div>'+rows;
+  bindCommon();
+  document.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>{location.hash=encodeURIComponent(el.getAttribute('data-open'));});
+}
+
+/* ---- entry ---- */
+function placeholder(){return '<div class="ico">＋</div><div>参考イラストを<br>アップロード</div>';}
+function entryHTML(v,e,i,forceOpen){
+  const key=eKey(v,i);
+  const open=forceOpen||openKeys.has(key);
+  const on=marks.has(key);
+  const tags=(e.tags||[]).map(t=>'<span class="tag">'+hl(t)+'</span>').join('');
+  const mark='<button class="bookmark'+(on?' on':'')+'" data-mark="'+esc(key)+'" aria-pressed="'+on+'" title="栞をはさむ">'+(on?'❦':'❧')+'</button>';
+  let body, dmode='';
+  if(e.negbody){
+    body='<div class="sect" style="margin-top:6px"><div class="sect-h"><span class="lb">ネガティブプロンプト</span><span class="sp"></span><button class="btn" data-copy="neg">ネガを写す</button></div><pre class="prompt neg" data-field="neg">'+hl(e.negbody)+'</pre></div>';
+  }else{
+    const mode=assetMode[key]||'indiv';dmode=mode;
+    const ckKey=key+'|'+mode;
+    const parts=modeParts(e,mode);const ck=checkStore[ckKey];
+    const plist=parts.map((p,idx)=>{const c=!ck||ck[idx]!==false;
+      return '<label class="part'+(c?'':' off')+'" data-pi="'+idx+'"><input type="checkbox" '+(c?'checked':'')+'><span class="pl">'+esc(p.l)+'</span><code>'+hl(p.t)+'</code></label>';}).join('');
+    const akey=key+'|'+mode;
+    body=
+      '<div class="modetabs">'+
+        '<button data-mode="indiv" class="'+(mode==='indiv'?'on':'')+'">個別版</button>'+
+        '<button data-mode="integ" class="'+(mode==='integ'?'on':'')+'">統合版</button>'+
+        '<span class="mode-note">'+(mode==='indiv'?'1プロンプト＝1枚の完成イラスト':'複数の構図を1枚のシートにまとめる')+'</span></div>'+
+      '<div class="asset">'+
+        '<div class="asset-img"><div class="asset-frame" data-akey="'+esc(akey)+'">'+placeholder()+'</div></div>'+
+        '<div class="asset-main">'+
+          '<div class="sect" style="margin-top:0"><div class="sect-h"><span class="lb">完成版プロンプト（ポジ＋ネガ＋推奨設定）</span><span class="sp"></span><button class="btn" data-copy="complete">完成版を写す</button></div>'+
+          '<pre class="prompt" data-field="complete">'+hl(completeTextMode(v,e,mode))+'</pre></div></div></div>'+
+      '<div class="sect"><div class="sect-h"><span class="lb">構成要素を選ぶ（個別プロンプト）</span><span class="sp"></span><button class="btn ghost tiny" data-all="on">全選択</button><button class="btn ghost tiny" data-all="off">全解除</button></div><div class="partlist">'+plist+'</div></div>'+
+      '<div class="sect"><div class="sect-h"><span class="lb">組み立てプレビュー（選択中の要素）</span><span class="sp"></span><button class="btn" data-copy="selected">選択分を写す</button></div><pre class="prompt" data-field="assembled">'+hl(selTextMode(e,ckKey,mode)||'（要素を選択してください）')+'</pre></div>'+
+      '<div class="sect"><div class="sect-h"><span class="lb">ネガティブ</span><span class="sp"></span><button class="btn ghost tiny" data-copy="neg">ネガを写す</button></div><pre class="prompt neg" data-field="neg">'+hl(modeNeg(v,e,mode))+'</pre></div>'+
+      '<div class="sect"><div class="sect-h"><span class="lb">推奨設定</span><span class="sp"></span><button class="btn ghost tiny" data-copy="set">設定を写す</button></div><pre class="prompt set" data-field="set">'+hl(modeSet(v,e,mode))+'</pre></div>';
+  }
+  return '<div class="entry'+(open?' open':'')+'" data-entry="'+esc(key)+'" data-vol="'+esc(v.id)+'" data-i="'+i+'" data-mode="'+dmode+'">'+
+    '<div class="entry-head" data-toggle><span class="entry-no">其ノ'+kanji(i+1)+'</span><span class="entry-title">'+hl(e.title)+'</span>'+tags+
+    '<span class="eh-spacer"></span>'+mark+'<span class="chev">▶</span></div>'+
+    '<div class="entry-body">'+body+'</div></div>';
+}
+
+function renderBook(v){
+  view='book';
+  document.getElementById('main').innerHTML=crumbs(v.no+' '+v.title)+
+    '<div class="book"><div class="book-top"><div class="book-no">'+esc(v.no)+'</div>'+
+    '<h2 class="book-title">'+hl(v.title)+'</h2><p class="book-preface">'+hl(v.preface)+'</p></div>'+
+    '<div class="pages">'+v.entries.map((e,i)=>entryHTML(v,e,i,false)).join('')+'</div></div>';
+  bindCommon();bindEntries();
+}
+function renderCollected(curLabel,title,sub,list){
+  document.getElementById('main').innerHTML=crumbs(curLabel)+
+    '<div class="book"><div class="book-top"><h2 class="book-title">'+hl(title)+'</h2>'+
+    '<p class="book-preface">'+esc(sub)+'</p></div>'+
+    '<div class="pages">'+(list.length?list.map(o=>entryHTML(o.v,o.e,o.i,true)).join('')
+      :'<div style="text-align:center;color:var(--sub);font-family:var(--serif);padding:40px 0">該当する頁はありません。</div>')+'</div></div>';
+  bindCommon();bindEntries();
+}
+function renderMarks(){view='marks';const list=[];DATA.forEach(v=>v.entries.forEach((e,i)=>{if(marks.has(eKey(v,i)))list.push({v,e,i});}));
+  renderCollected('お気に入り','お気に入りの頁','栞をはさんだ頁の控えです。',list);}
+function renderSearch(){view='search';const list=[];DATA.forEach(v=>v.entries.forEach((e,i)=>{if(entryMatch(e,v))list.push({v,e,i});}));
+  renderCollected('検索「'+query+'」','「'+query+'」の検索結果',list.length+' 件の頁が見つかりました。',list);}
+
+/* ---- bindings ---- */
+function bindCommon(){document.querySelectorAll('[data-home]').forEach(a=>a.onclick=()=>goShelf());}
+function bindEntries(){document.getElementById('main').querySelectorAll('.entry').forEach(en=>{bindOneEntry(en);hydrateEntry(en);});}
+function bindOneEntry(en){
+  const key=en.getAttribute('data-entry');
+  const v=volById(en.getAttribute('data-vol')), e=v.entries[+en.getAttribute('data-i')];
+  en.querySelector('[data-toggle]').addEventListener('click',(ev)=>{
+    if(ev.target.closest('.bookmark'))return;
+    const opened=en.classList.toggle('open');if(opened)openKeys.add(key);else openKeys.delete(key);});
+  const bm=en.querySelector('[data-mark]');if(bm)bm.onclick=(ev)=>{ev.stopPropagation();toggleMark(key,bm);};
+  en.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{assetMode[key]=b.getAttribute('data-mode');reRenderEntry(en);});
+  en.querySelectorAll('.part input').forEach(cb=>cb.addEventListener('change',()=>setCheck(en,key,e)));
+  const on1=en.querySelector('[data-all="on"]'),off1=en.querySelector('[data-all="off"]');
+  if(on1)on1.onclick=()=>{en.querySelectorAll('.part input').forEach(c=>c.checked=true);setCheck(en,key,e);};
+  if(off1)off1.onclick=()=>{en.querySelectorAll('.part input').forEach(c=>c.checked=false);setCheck(en,key,e);};
+  en.querySelectorAll('[data-copy]').forEach(btn=>btn.onclick=(ev)=>{
+    const kind=btn.getAttribute('data-copy');const mode=en.getAttribute('data-mode')||'indiv';let txt='';
+    if(kind==='complete')txt=completeTextMode(v,e,mode);
+    else if(kind==='selected')txt=selTextMode(e,key+'|'+mode,mode);
+    else if(kind==='neg')txt=e.negbody?e.negbody:modeNeg(v,e,mode);
+    else if(kind==='set')txt=modeSet(v,e,mode);
+    copy(txt,ev.currentTarget);});
+}
+function reRenderEntry(en){
+  const v=volById(en.getAttribute('data-vol')),i=+en.getAttribute('data-i'),e=v.entries[i];
+  const tmp=document.createElement('div');tmp.innerHTML=entryHTML(v,e,i,en.classList.contains('open'));
+  const fresh=tmp.firstElementChild;en.replaceWith(fresh);bindOneEntry(fresh);hydrateEntry(fresh);
+}
+function setCheck(en,key,e){
+  const mode=en.getAttribute('data-mode')||'indiv';const ckKey=key+'|'+mode;
+  const checks=[...en.querySelectorAll('.part input')].map(c=>c.checked);
+  checkStore[ckKey]=checks;
+  en.querySelectorAll('.part').forEach((p,idx)=>p.classList.toggle('off',!checks[idx]));
+  en.querySelector('[data-field="assembled"]').textContent=selTextMode(e,ckKey,mode)||'（要素を選択してください）';
+}
+function toggleMark(key,btn){
+  if(marks.has(key))marks.delete(key);else marks.add(key);
+  localStorage.setItem(LS.marks,JSON.stringify([...marks]));updMeta();
+  if(btn){const on=marks.has(key);btn.classList.toggle('on',on);btn.textContent=on?'❦':'❧';btn.setAttribute('aria-pressed',on);}
+  if(view==='shelf'||view==='marks')route();
+}
+
+/* ---- asset image ---- */
+function hydrateEntry(en){
+  const f=en.querySelector('.asset-frame[data-akey]');if(!f)return;
+  const k=f.getAttribute('data-akey');
+  bindEmptyFrame(f,k);
+  storeGet(k).then(blob=>{if(blob)fillFrame(f,blob,k);});
+}
+function bindEmptyFrame(f,k){f.onclick=()=>{pendingKey=k;pendingFrame=f;document.getElementById('assetFile').click();};}
+function fillFrame(f,blob,k){
+  const u=URL.createObjectURL(blob);
+  f.classList.add('filled');f.onclick=null;f.innerHTML='<img src="'+u+'" alt="参考イラスト">';
+  const wrap=f.parentElement;let act=wrap.querySelector('.asset-actions');
+  if(!act){act=document.createElement('div');act.className='asset-actions';wrap.appendChild(act);}
+  act.innerHTML='<button class="btn ghost tiny" data-replace>差し替え</button><button class="btn ghost tiny" data-remove>削除</button>';
+  act.querySelector('[data-replace]').onclick=()=>{pendingKey=k;pendingFrame=f;document.getElementById('assetFile').click();};
+  act.querySelector('[data-remove]').onclick=()=>{storeDel(k).then(()=>{f.classList.remove('filled');f.innerHTML=placeholder();bindEmptyFrame(f,k);act.remove();toast('見本を削除しました');});};
+}
+function handleFile(file,key,frame){
+  if(!file||!frame)return;
+  const url=URL.createObjectURL(file);const img=new Image();
+  img.onload=()=>{
+    const max=1024;let w=img.naturalWidth,h=img.naturalHeight;const sc=Math.min(1,max/Math.max(w,h));
+    w=Math.max(1,Math.round(w*sc));h=Math.max(1,Math.round(h*sc));
+    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+    URL.revokeObjectURL(url);
+    c.toBlob(blob=>{if(!blob){toast('画像を処理できませんでした');return;}
+      storePut(key,blob).then(()=>{fillFrame(frame,blob,key);toast('見本を保存しました');})
+        .catch(()=>toast('保存できませんでした（容量超過の可能性）'));},'image/jpeg',0.85);
+  };
+  img.onerror=()=>{URL.revokeObjectURL(url);toast('画像を読み込めませんでした');};
+  img.src=url;
+}
+
+/* ---- misc ---- */
+function copy(text,btn){
+  const done=()=>{toast('写し取りました');if(btn&&btn.classList.contains('btn')){const o=btn.textContent;btn.classList.add('done');btn.textContent='✓ 写し取り';setTimeout(()=>{btn.classList.remove('done');btn.textContent=o;},1200);}};
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand('copy');done();}catch(e){toast('写せませんでした');}ta.remove();};
+  if(!text){toast('対象がありません');return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fb);}else{fb();}
+}
+let toastT;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),1400);}
+function applyTheme(){document.documentElement.setAttribute('data-theme',theme);document.getElementById('themeBtn').textContent=theme==='night'?'☀️':'🌙';}
+function updMeta(){document.getElementById('hmeta').textContent='全'+DATA.length+'巻・'+totalEntries()+'頁・栞'+marks.size;}
+function goShelf(){query='';document.getElementById('search').value='';if(location.hash){location.hash='';}else route();}
+
+function route(){
+  updMeta();
+  if(query){renderSearch();return;}
+  const id=decodeURIComponent(location.hash.slice(1));
+  if(!id){renderShelf();return;}
+  if(id==='__marks'){renderMarks();return;}
+  const v=volById(id);if(v)renderBook(v);else renderShelf();
+}
+
+document.getElementById('assetFile').addEventListener('change',(ev)=>{const file=ev.target.files[0];handleFile(file,pendingKey,pendingFrame);ev.target.value='';pendingKey=null;pendingFrame=null;});
+document.getElementById('search').addEventListener('input',(e)=>{query=e.target.value.trim();route();});
+document.getElementById('shelfBtn').onclick=goShelf;
+document.getElementById('home').onclick=goShelf;
+document.getElementById('themeBtn').onclick=()=>{theme=theme==='night'?'day':'night';localStorage.setItem(LS.theme,theme);applyTheme();};
+document.addEventListener('keydown',(e)=>{const t=document.activeElement.tagName;
+  if(e.key==='/'&&t!=='INPUT'&&t!=='TEXTAREA'){e.preventDefault();document.getElementById('search').focus();}
+  if(e.key==='Escape'){if(query){query='';document.getElementById('search').value='';route();}else if(location.hash){location.hash='';}}});
+window.addEventListener('hashchange',()=>{if(!query)route();});
+
+applyTheme();updMeta();route();
+</script>
+</body>
+</html>

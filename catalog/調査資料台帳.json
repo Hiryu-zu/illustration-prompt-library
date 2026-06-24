@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-06-25",
+  "sources": [
+    {
+      "id": "SRC-20260625-ACTION",
+      "title": "アクション性のあるイラスト表現技法の体系的リサーチ",
+      "path": "inbox/deep-research-report (1).md",
+      "received": "2026-06-25",
+      "status": "extracted",
+      "domains": ["アクション", "ポーズ", "カメラ", "速度", "衝撃", "光"],
+      "nextAction": "カード内容をレビュー後、原本をsourcesへ移動"
+    },
+    {
+      "id": "SRC-20260625-PSYCHOLOGY",
+      "title": "人の心理に作用するイラスト設計の深層研究",
+      "path": "inbox/deep-research-report (2).md",
+      "received": "2026-06-25",
+      "status": "extracted",
+      "domains": ["視覚認知", "注意", "感情", "記憶", "愛着", "SNS"],
+      "nextAction": "カード内容をレビュー後、原本をsourcesへ移動"
+    },
+    {
+      "id": "SRC-20260625-EXCITEMENT",
+      "title": "「ワクワク」の設計原理",
+      "path": "inbox/deep-research-report (3).md",
+      "received": "2026-06-25",
+      "status": "extracted",
+      "domains": ["期待", "好奇心", "探索", "参加感", "物語", "UX"],
+      "nextAction": "カード内容をレビュー後、原本をsourcesへ移動"
+    }
+  ]
+}

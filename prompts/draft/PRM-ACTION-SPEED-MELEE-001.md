@@ -13,6 +13,9 @@ card_ids: [CARD-ACTION-LINE, CARD-ACTION-SELECTIVE-BLUR, CARD-ACTION-DIRECTIONAL
 module_ids: [MOD-BODY-ACTION-LINE, MOD-MOTION-SELECTIVE-BLUR, MOD-MOTION-DIRECTIONAL-CUES, MOD-CONSTRAINT-PRESERVE-FORM]
 model: generic
 status: draft
+preview_image: outputs/action-tests/PRM-ACTION-SPEED-MELEE-001.png
+test_status: sample_generated
+test_date: 2026-06-25
 version: 1
 created: 2026-06-25
 updated: 2026-06-25
@@ -43,7 +46,11 @@ updated: 2026-06-25
 
 | 日付 | モデル・設定 | 出力数 | 成功率 | 作例 | 気づき |
 |---|---|---:|---:|---|---|
-| 未実施 | - | 0 | - | - | `draft`。構図、身体、エフェクトの反映率を確認する |
+| 2026-06-25 | Codex built-in ImageGen | 1 | 参考値 | `outputs/action-tests/PRM-ACTION-SPEED-MELEE-001.png` | 交差点、人物分離、局所光は良好。左人物に剣が加わり、近接戦の武器条件は曖昧さが残った |
+
+## テスト所見
+
+命中点を中心に二人のシルエットが分離し、進行方向と局所光は明確だった。一方、「拳の外縁」という記述と二者の近接戦から、片方が剣を持つ解釈になった。素手戦へ限定する場合は「両者とも武器を持たない」を追加する。
 
 ## 判定
 

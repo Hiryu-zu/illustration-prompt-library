@@ -13,6 +13,9 @@ card_ids: [CARD-ACTION-LINE, CARD-ACTION-DIRECTIONAL-LINES, CARD-ACTION-FORM-PRE
 module_ids: [MOD-BODY-ACTION-LINE, MOD-MOTION-DIRECTIONAL-CUES, MOD-CONSTRAINT-PRESERVE-FORM]
 model: generic
 status: draft
+preview_image: outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003.png
+test_status: sample_generated
+test_date: 2026-06-25
 version: 1
 created: 2026-06-25
 updated: 2026-06-25
@@ -43,7 +46,23 @@ updated: 2026-06-25
 
 | 日付 | モデル・設定 | 出力数 | 成功率 | 作例 | 気づき |
 |---|---|---:|---:|---|---|
-| 未実施 | - | 0 | - | - | `draft`。構図、身体、エフェクトの反映率を確認する |
+| 2026-06-25 | Codex built-in ImageGen | 1 | 参考値 | `outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003.png` | 低い視点、雨、水しぶき、進行方向、二次人物の分離が良好 |
+
+## テスト時の差し替え値
+
+- 主役：黒いコートの若い女性剣士
+- 開始地点：雨の路地の左手前
+- 到達地点：右奥に立つ敵の背後
+- 時間相：加速直後
+- 主曲線：頭から刃先までのS字
+- 鮮明箇所：顔、胸、軸脚、刀の鍔
+- 流す箇所：髪先、コート裾、刃先、雨の背景
+- 環境反応：水しぶきと舞う紙片
+- カメラ：路面すれすれのローアングル
+
+## テスト所見
+
+差し替え型でも、主役、進行方向、背景、カメラが一貫した一枚になった。二段残像は実体と区別でき、遠景の敵も二次焦点として機能している。
 
 ## 判定
 

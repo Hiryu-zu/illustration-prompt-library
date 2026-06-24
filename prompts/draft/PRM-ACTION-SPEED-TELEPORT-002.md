@@ -13,6 +13,9 @@ card_ids: [CARD-ACTION-DIRECTIONAL-LINES, CARD-ACTION-SELECTIVE-BLUR, CARD-ACTIO
 module_ids: [MOD-MOTION-DIRECTIONAL-CUES, MOD-MOTION-SELECTIVE-BLUR, MOD-MOTION-MATERIAL-FOLLOWTHROUGH, MOD-TIME-DECISIVE-PHASE]
 model: generic
 status: draft
+preview_image: outputs/action-tests/PRM-ACTION-SPEED-TELEPORT-002.png
+test_status: sample_generated
+test_date: 2026-06-25
 version: 1
 created: 2026-06-25
 updated: 2026-06-25
@@ -43,7 +46,11 @@ updated: 2026-06-25
 
 | 日付 | モデル・設定 | 出力数 | 成功率 | 作例 | 気づき |
 |---|---|---:|---:|---|---|
-| 未実施 | - | 0 | - | - | `draft`。構図、身体、エフェクトの反映率を確認する |
+| 2026-06-25 | Codex built-in ImageGen | 1 | 参考値 | `outputs/action-tests/PRM-ACTION-SPEED-TELEPORT-002.png` | 二本の軌道と人物分離は良好。残像は指定した二段より多く生成された |
+
+## テスト所見
+
+対向する青と橙の軌道、中央の交差点、左右の実体は明快だった。残像が各人物につき三体以上見えるため、次回は「実体一人につき残像は二つだけ」と数量をさらに強く固定する。
 
 ## 判定
 

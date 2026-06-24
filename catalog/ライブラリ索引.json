@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-06-25",
+  "counts": {
+    "sources": 3,
+    "cards": 15,
+    "modules": 10,
+    "prompts": 3
+  },
+  "cards": [
+    {"id": "CARD-ACTION-LINE", "path": "cards/CARD-ACTION-LINE.md"},
+    {"id": "CARD-ACTION-KINETIC-CHAIN", "path": "cards/CARD-ACTION-KINETIC-CHAIN.md"},
+    {"id": "CARD-ACTION-SELECTIVE-BLUR", "path": "cards/CARD-ACTION-SELECTIVE-BLUR.md"},
+    {"id": "CARD-ACTION-REACTION-VECTOR", "path": "cards/CARD-ACTION-REACTION-VECTOR.md"},
+    {"id": "CARD-ACTION-TIME-PHASE", "path": "cards/CARD-ACTION-TIME-PHASE.md"},
+    {"id": "CARD-PSY-FOCAL-HIERARCHY", "path": "cards/CARD-PSY-FOCAL-HIERARCHY.md"},
+    {"id": "CARD-PSY-GAZE-PATH", "path": "cards/CARD-PSY-GAZE-PATH.md"},
+    {"id": "CARD-PSY-RESOLVABLE-MYSTERY", "path": "cards/CARD-PSY-RESOLVABLE-MYSTERY.md"},
+    {"id": "CARD-PSY-EMOTION-IN-BODY", "path": "cards/CARD-PSY-EMOTION-IN-BODY.md"},
+    {"id": "CARD-PSY-ATTACHMENT-CONTINUITY", "path": "cards/CARD-PSY-ATTACHMENT-CONTINUITY.md"},
+    {"id": "CARD-EXCITING-VISIBLE-UNKNOWN", "path": "cards/CARD-EXCITING-VISIBLE-UNKNOWN.md"},
+    {"id": "CARD-EXCITING-OPTIMAL-UNCERTAINTY", "path": "cards/CARD-EXCITING-OPTIMAL-UNCERTAINTY.md"},
+    {"id": "CARD-EXCITING-ATTAINABLE-PATH", "path": "cards/CARD-EXCITING-ATTAINABLE-PATH.md"},
+    {"id": "CARD-EXCITING-PARTICIPANT-VIEW", "path": "cards/CARD-EXCITING-PARTICIPANT-VIEW.md"},
+    {"id": "CARD-EXCITING-PRE-TRANSFORMATION", "path": "cards/CARD-EXCITING-PRE-TRANSFORMATION.md"}
+  ],
+  "modules": [
+    {"id": "MOD-BODY-ACTION-LINE", "path": "modules/MOD-BODY-ACTION-LINE.md"},
+    {"id": "MOD-BODY-KINETIC-CHAIN", "path": "modules/MOD-BODY-KINETIC-CHAIN.md"},
+    {"id": "MOD-MOTION-SELECTIVE-BLUR", "path": "modules/MOD-MOTION-SELECTIVE-BLUR.md"},
+    {"id": "MOD-IMPACT-REACTION-VECTOR", "path": "modules/MOD-IMPACT-REACTION-VECTOR.md"},
+    {"id": "MOD-TIME-DECISIVE-PHASE", "path": "modules/MOD-TIME-DECISIVE-PHASE.md"},
+    {"id": "MOD-COMPOSITION-FOCAL-HIERARCHY", "path": "modules/MOD-COMPOSITION-FOCAL-HIERARCHY.md"},
+    {"id": "MOD-STORY-RESOLVABLE-CLUE", "path": "modules/MOD-STORY-RESOLVABLE-CLUE.md"},
+    {"id": "MOD-EMOTION-BODY-CONTEXT", "path": "modules/MOD-EMOTION-BODY-CONTEXT.md"},
+    {"id": "MOD-CHARACTER-SIGNATURE-VARIATION", "path": "modules/MOD-CHARACTER-SIGNATURE-VARIATION.md"},
+    {"id": "MOD-SCENE-INVITING-THRESHOLD", "path": "modules/MOD-SCENE-INVITING-THRESHOLD.md"}
+  ],
+  "prompts": [
+    {"id": "PRM-EXCITEMENT-DEPARTURE-001", "path": "prompts/draft/PRM-EXCITEMENT-DEPARTURE-001.md", "status": "draft"},
+    {"id": "PRM-ACTION-HEAVY-PUNCH-001", "path": "prompts/draft/PRM-ACTION-HEAVY-PUNCH-001.md", "status": "draft"},
+    {"id": "PRM-STORY-SECOND-READ-001", "path": "prompts/draft/PRM-STORY-SECOND-READ-001.md", "status": "draft"}
+  ]
+}

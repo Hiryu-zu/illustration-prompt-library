@@ -1,44 +1,371 @@
 {
-  "schemaVersion": 1,
-  "updated": "2026-06-25",
-  "counts": {
-    "sources": 3,
-    "cards": 15,
-    "modules": 10,
-    "prompts": 3
-  },
-  "cards": [
-    {"id": "CARD-ACTION-LINE", "path": "cards/CARD-ACTION-LINE.md"},
-    {"id": "CARD-ACTION-KINETIC-CHAIN", "path": "cards/CARD-ACTION-KINETIC-CHAIN.md"},
-    {"id": "CARD-ACTION-SELECTIVE-BLUR", "path": "cards/CARD-ACTION-SELECTIVE-BLUR.md"},
-    {"id": "CARD-ACTION-REACTION-VECTOR", "path": "cards/CARD-ACTION-REACTION-VECTOR.md"},
-    {"id": "CARD-ACTION-TIME-PHASE", "path": "cards/CARD-ACTION-TIME-PHASE.md"},
-    {"id": "CARD-PSY-FOCAL-HIERARCHY", "path": "cards/CARD-PSY-FOCAL-HIERARCHY.md"},
-    {"id": "CARD-PSY-GAZE-PATH", "path": "cards/CARD-PSY-GAZE-PATH.md"},
-    {"id": "CARD-PSY-RESOLVABLE-MYSTERY", "path": "cards/CARD-PSY-RESOLVABLE-MYSTERY.md"},
-    {"id": "CARD-PSY-EMOTION-IN-BODY", "path": "cards/CARD-PSY-EMOTION-IN-BODY.md"},
-    {"id": "CARD-PSY-ATTACHMENT-CONTINUITY", "path": "cards/CARD-PSY-ATTACHMENT-CONTINUITY.md"},
-    {"id": "CARD-EXCITING-VISIBLE-UNKNOWN", "path": "cards/CARD-EXCITING-VISIBLE-UNKNOWN.md"},
-    {"id": "CARD-EXCITING-OPTIMAL-UNCERTAINTY", "path": "cards/CARD-EXCITING-OPTIMAL-UNCERTAINTY.md"},
-    {"id": "CARD-EXCITING-ATTAINABLE-PATH", "path": "cards/CARD-EXCITING-ATTAINABLE-PATH.md"},
-    {"id": "CARD-EXCITING-PARTICIPANT-VIEW", "path": "cards/CARD-EXCITING-PARTICIPANT-VIEW.md"},
-    {"id": "CARD-EXCITING-PRE-TRANSFORMATION", "path": "cards/CARD-EXCITING-PRE-TRANSFORMATION.md"}
-  ],
-  "modules": [
-    {"id": "MOD-BODY-ACTION-LINE", "path": "modules/MOD-BODY-ACTION-LINE.md"},
-    {"id": "MOD-BODY-KINETIC-CHAIN", "path": "modules/MOD-BODY-KINETIC-CHAIN.md"},
-    {"id": "MOD-MOTION-SELECTIVE-BLUR", "path": "modules/MOD-MOTION-SELECTIVE-BLUR.md"},
-    {"id": "MOD-IMPACT-REACTION-VECTOR", "path": "modules/MOD-IMPACT-REACTION-VECTOR.md"},
-    {"id": "MOD-TIME-DECISIVE-PHASE", "path": "modules/MOD-TIME-DECISIVE-PHASE.md"},
-    {"id": "MOD-COMPOSITION-FOCAL-HIERARCHY", "path": "modules/MOD-COMPOSITION-FOCAL-HIERARCHY.md"},
-    {"id": "MOD-STORY-RESOLVABLE-CLUE", "path": "modules/MOD-STORY-RESOLVABLE-CLUE.md"},
-    {"id": "MOD-EMOTION-BODY-CONTEXT", "path": "modules/MOD-EMOTION-BODY-CONTEXT.md"},
-    {"id": "MOD-CHARACTER-SIGNATURE-VARIATION", "path": "modules/MOD-CHARACTER-SIGNATURE-VARIATION.md"},
-    {"id": "MOD-SCENE-INVITING-THRESHOLD", "path": "modules/MOD-SCENE-INVITING-THRESHOLD.md"}
-  ],
-  "prompts": [
-    {"id": "PRM-EXCITEMENT-DEPARTURE-001", "path": "prompts/draft/PRM-EXCITEMENT-DEPARTURE-001.md", "status": "draft"},
-    {"id": "PRM-ACTION-HEAVY-PUNCH-001", "path": "prompts/draft/PRM-ACTION-HEAVY-PUNCH-001.md", "status": "draft"},
-    {"id": "PRM-STORY-SECOND-READ-001", "path": "prompts/draft/PRM-STORY-SECOND-READ-001.md", "status": "draft"}
-  ]
+    "schemaVersion":  1,
+    "updated":  "2026-06-25",
+    "counts":  {
+                   "sources":  3,
+                   "cards":  22,
+                   "modules":  17,
+                   "prompts":  32
+               },
+    "cards":  [
+                  {
+                      "id":  "CARD-ACTION-CAMERA-PERSPECTIVE",
+                      "path":  "cards/CARD-ACTION-CAMERA-PERSPECTIVE.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-DIRECTIONAL-LINES",
+                      "path":  "cards/CARD-ACTION-DIRECTIONAL-LINES.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-FORM-PRESERVATION",
+                      "path":  "cards/CARD-ACTION-FORM-PRESERVATION.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-KINETIC-CHAIN",
+                      "path":  "cards/CARD-ACTION-KINETIC-CHAIN.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-LIGHTING-FOCUS",
+                      "path":  "cards/CARD-ACTION-LIGHTING-FOCUS.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-LINE",
+                      "path":  "cards/CARD-ACTION-LINE.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-MATERIAL-FOLLOWTHROUGH",
+                      "path":  "cards/CARD-ACTION-MATERIAL-FOLLOWTHROUGH.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-NEGATIVE-SPACE",
+                      "path":  "cards/CARD-ACTION-NEGATIVE-SPACE.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-REACTION-VECTOR",
+                      "path":  "cards/CARD-ACTION-REACTION-VECTOR.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-SCALE-EVIDENCE",
+                      "path":  "cards/CARD-ACTION-SCALE-EVIDENCE.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-SELECTIVE-BLUR",
+                      "path":  "cards/CARD-ACTION-SELECTIVE-BLUR.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-ACTION-TIME-PHASE",
+                      "path":  "cards/CARD-ACTION-TIME-PHASE.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-EXCITING-ATTAINABLE-PATH",
+                      "path":  "cards/CARD-EXCITING-ATTAINABLE-PATH.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-EXCITING-OPTIMAL-UNCERTAINTY",
+                      "path":  "cards/CARD-EXCITING-OPTIMAL-UNCERTAINTY.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-EXCITING-PARTICIPANT-VIEW",
+                      "path":  "cards/CARD-EXCITING-PARTICIPANT-VIEW.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-EXCITING-PRE-TRANSFORMATION",
+                      "path":  "cards/CARD-EXCITING-PRE-TRANSFORMATION.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-EXCITING-VISIBLE-UNKNOWN",
+                      "path":  "cards/CARD-EXCITING-VISIBLE-UNKNOWN.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-PSY-ATTACHMENT-CONTINUITY",
+                      "path":  "cards/CARD-PSY-ATTACHMENT-CONTINUITY.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-PSY-EMOTION-IN-BODY",
+                      "path":  "cards/CARD-PSY-EMOTION-IN-BODY.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-PSY-FOCAL-HIERARCHY",
+                      "path":  "cards/CARD-PSY-FOCAL-HIERARCHY.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-PSY-GAZE-PATH",
+                      "path":  "cards/CARD-PSY-GAZE-PATH.md",
+                      "status":  "extracted"
+                  },
+                  {
+                      "id":  "CARD-PSY-RESOLVABLE-MYSTERY",
+                      "path":  "cards/CARD-PSY-RESOLVABLE-MYSTERY.md",
+                      "status":  "extracted"
+                  }
+              ],
+    "modules":  [
+                    {
+                        "id":  "MOD-BODY-ACTION-LINE",
+                        "path":  "modules/MOD-BODY-ACTION-LINE.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-BODY-KINETIC-CHAIN",
+                        "path":  "modules/MOD-BODY-KINETIC-CHAIN.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-CAMERA-ACTION-PERSPECTIVE",
+                        "path":  "modules/MOD-CAMERA-ACTION-PERSPECTIVE.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-CHARACTER-SIGNATURE-VARIATION",
+                        "path":  "modules/MOD-CHARACTER-SIGNATURE-VARIATION.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-COMPOSITION-ACTION-SPACE",
+                        "path":  "modules/MOD-COMPOSITION-ACTION-SPACE.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-COMPOSITION-FOCAL-HIERARCHY",
+                        "path":  "modules/MOD-COMPOSITION-FOCAL-HIERARCHY.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-CONSTRAINT-PRESERVE-FORM",
+                        "path":  "modules/MOD-CONSTRAINT-PRESERVE-FORM.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-EMOTION-BODY-CONTEXT",
+                        "path":  "modules/MOD-EMOTION-BODY-CONTEXT.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-IMPACT-REACTION-VECTOR",
+                        "path":  "modules/MOD-IMPACT-REACTION-VECTOR.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-LIGHT-ACTION-FOCUS",
+                        "path":  "modules/MOD-LIGHT-ACTION-FOCUS.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-MOTION-DIRECTIONAL-CUES",
+                        "path":  "modules/MOD-MOTION-DIRECTIONAL-CUES.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-MOTION-MATERIAL-FOLLOWTHROUGH",
+                        "path":  "modules/MOD-MOTION-MATERIAL-FOLLOWTHROUGH.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-MOTION-SELECTIVE-BLUR",
+                        "path":  "modules/MOD-MOTION-SELECTIVE-BLUR.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-SCALE-COMPARISON-REACTION",
+                        "path":  "modules/MOD-SCALE-COMPARISON-REACTION.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-SCENE-INVITING-THRESHOLD",
+                        "path":  "modules/MOD-SCENE-INVITING-THRESHOLD.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-STORY-RESOLVABLE-CLUE",
+                        "path":  "modules/MOD-STORY-RESOLVABLE-CLUE.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "MOD-TIME-DECISIVE-PHASE",
+                        "path":  "modules/MOD-TIME-DECISIVE-PHASE.md",
+                        "status":  "draft"
+                    }
+                ],
+    "prompts":  [
+                    {
+                        "id":  "PRM-ACTION-DANCE-LEAP-002",
+                        "path":  "prompts/draft/PRM-ACTION-DANCE-LEAP-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-DANCE-SPIN-001",
+                        "path":  "prompts/draft/PRM-ACTION-DANCE-SPIN-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-DANCE-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-DANCE-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-GIANT-KAIJU-001",
+                        "path":  "prompts/draft/PRM-ACTION-GIANT-KAIJU-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-GIANT-ROBOT-LANDING-002",
+                        "path":  "prompts/draft/PRM-ACTION-GIANT-ROBOT-LANDING-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-GIANT-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-GIANT-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-GUN-CLOSE-001",
+                        "path":  "prompts/draft/PRM-ACTION-GUN-CLOSE-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-GUN-CROSSFIRE-002",
+                        "path":  "prompts/draft/PRM-ACTION-GUN-CROSSFIRE-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-GUN-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-GUN-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-HEAVY-HAMMER-002",
+                        "path":  "prompts/draft/PRM-ACTION-HEAVY-HAMMER-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-HEAVY-LANDING-003",
+                        "path":  "prompts/draft/PRM-ACTION-HEAVY-LANDING-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-HEAVY-PUNCH-001",
+                        "path":  "prompts/draft/PRM-ACTION-HEAVY-PUNCH-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-MAGIC-CHARGE-002",
+                        "path":  "prompts/draft/PRM-ACTION-MAGIC-CHARGE-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-MAGIC-FINISHER-001",
+                        "path":  "prompts/draft/PRM-ACTION-MAGIC-FINISHER-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-MAGIC-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-MAGIC-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-MARTIAL-COUNTER-002",
+                        "path":  "prompts/draft/PRM-ACTION-MARTIAL-COUNTER-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-MARTIAL-PALM-001",
+                        "path":  "prompts/draft/PRM-ACTION-MARTIAL-PALM-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-MARTIAL-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-MARTIAL-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SPEED-MELEE-001",
+                        "path":  "prompts/draft/PRM-ACTION-SPEED-MELEE-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SPEED-TELEPORT-002",
+                        "path":  "prompts/draft/PRM-ACTION-SPEED-TELEPORT-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SPEED-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-SPEED-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SPORT-BASEBALL-001",
+                        "path":  "prompts/draft/PRM-ACTION-SPORT-BASEBALL-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SPORT-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-SPORT-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SPORT-VOLLEY-002",
+                        "path":  "prompts/draft/PRM-ACTION-SPORT-VOLLEY-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SWORD-CLASH-001",
+                        "path":  "prompts/draft/PRM-ACTION-SWORD-CLASH-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SWORD-DRAW-002",
+                        "path":  "prompts/draft/PRM-ACTION-SWORD-DRAW-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-SWORD-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-SWORD-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-VEHICLE-CHASE-002",
+                        "path":  "prompts/draft/PRM-ACTION-VEHICLE-CHASE-002.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-VEHICLE-CORNER-001",
+                        "path":  "prompts/draft/PRM-ACTION-VEHICLE-CORNER-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-ACTION-VEHICLE-TEMPLATE-003",
+                        "path":  "prompts/draft/PRM-ACTION-VEHICLE-TEMPLATE-003.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-EXCITEMENT-DEPARTURE-001",
+                        "path":  "prompts/draft/PRM-EXCITEMENT-DEPARTURE-001.md",
+                        "status":  "draft"
+                    },
+                    {
+                        "id":  "PRM-STORY-SECOND-READ-001",
+                        "path":  "prompts/draft/PRM-STORY-SECOND-READ-001.md",
+                        "status":  "draft"
+                    }
+                ]
 }

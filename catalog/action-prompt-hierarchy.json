@@ -1,0 +1,273 @@
+{
+    "sourceId":  "SRC-20260625-ACTION",
+    "title":  "Action illustration techniques",
+    "pattern":  "10 families x 3 tiers",
+    "promptCount":  30,
+    "tiers":  [
+                  "演出型",
+                  "基本型",
+                  "差し替え型"
+              ],
+    "families":  [
+                     {
+                         "name":  "ダンス・舞踏",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-DANCE-LEAP-002",
+                                             "title":  "舞踏の跳躍頂点",
+                                             "family":  "ダンス・舞踏",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-DANCE-LEAP-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-DANCE-SPIN-001",
+                                             "title":  "衣装が広がる高速旋回",
+                                             "family":  "ダンス・舞踏",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-DANCE-SPIN-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-DANCE-TEMPLATE-003",
+                                             "title":  "ダンス動作・差し替え型",
+                                             "family":  "ダンス・舞踏",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-DANCE-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "巨大怪獣・巨大ロボ",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-GIANT-KAIJU-001",
+                                             "title":  "巨大怪獣の接近",
+                                             "family":  "巨大怪獣・巨大ロボ",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-GIANT-KAIJU-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-GIANT-ROBOT-LANDING-002",
+                                             "title":  "巨大ロボットの着地",
+                                             "family":  "巨大怪獣・巨大ロボ",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-GIANT-ROBOT-LANDING-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-GIANT-TEMPLATE-003",
+                                             "title":  "巨大戦・差し替え型",
+                                             "family":  "巨大怪獣・巨大ロボ",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-GIANT-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "銃撃・射撃戦",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-GUN-CLOSE-001",
+                                             "title":  "手前へ迫る銃撃",
+                                             "family":  "銃撃・射撃戦",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-GUN-CLOSE-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-GUN-CROSSFIRE-002",
+                                             "title":  "横方向の射撃戦",
+                                             "family":  "銃撃・射撃戦",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-GUN-CROSSFIRE-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-GUN-TEMPLATE-003",
+                                             "title":  "射撃アクション・差し替え型",
+                                             "family":  "銃撃・射撃戦",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-GUN-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "重量級の一撃",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-HEAVY-HAMMER-002",
+                                             "title":  "重量武器の振り下ろし",
+                                             "family":  "重量級の一撃",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-HEAVY-HAMMER-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-HEAVY-LANDING-003",
+                                             "title":  "重量着地・差し替え型",
+                                             "family":  "重量級の一撃",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-HEAVY-LANDING-003.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-HEAVY-PUNCH-001",
+                                             "title":  "重量感のある決定的な拳撃",
+                                             "family":  "重量級の一撃",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-HEAVY-PUNCH-001.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "魔法・必殺技",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-MAGIC-CHARGE-002",
+                                             "title":  "必殺技を溜める直前",
+                                             "family":  "魔法・必殺技",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-MAGIC-CHARGE-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-MAGIC-FINISHER-001",
+                                             "title":  "魔法の必殺技",
+                                             "family":  "魔法・必殺技",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-MAGIC-FINISHER-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-MAGIC-TEMPLATE-003",
+                                             "title":  "必殺技・差し替え型",
+                                             "family":  "魔法・必殺技",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-MAGIC-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "武術・格闘技",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-MARTIAL-COUNTER-002",
+                                             "title":  "受け流しからの反撃",
+                                             "family":  "武術・格闘技",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-MARTIAL-COUNTER-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-MARTIAL-PALM-001",
+                                             "title":  "武術の掌打",
+                                             "family":  "武術・格闘技",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-MARTIAL-PALM-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-MARTIAL-TEMPLATE-003",
+                                             "title":  "武術技・差し替え型",
+                                             "family":  "武術・格闘技",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-MARTIAL-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "高速戦・瞬間移動",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-SPEED-MELEE-001",
+                                             "title":  "高速の近接戦",
+                                             "family":  "高速戦・瞬間移動",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-SPEED-MELEE-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-SPEED-TELEPORT-002",
+                                             "title":  "瞬間移動のすれ違い",
+                                             "family":  "高速戦・瞬間移動",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-SPEED-TELEPORT-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-SPEED-TEMPLATE-003",
+                                             "title":  "高速移動アクション・差し替え型",
+                                             "family":  "高速戦・瞬間移動",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-SPEED-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "スポーツ",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-SPORT-BASEBALL-001",
+                                             "title":  "打球の瞬間",
+                                             "family":  "スポーツ",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-SPORT-BASEBALL-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-SPORT-TEMPLATE-003",
+                                             "title":  "スポーツ決定的瞬間・差し替え型",
+                                             "family":  "スポーツ",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-SPORT-TEMPLATE-003.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-SPORT-VOLLEY-002",
+                                             "title":  "空中ボレー",
+                                             "family":  "スポーツ",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-SPORT-VOLLEY-002.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "剣戟",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-SWORD-CLASH-001",
+                                             "title":  "剣戟の交差",
+                                             "family":  "剣戟",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-SWORD-CLASH-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-SWORD-DRAW-002",
+                                             "title":  "抜刀直後の一閃",
+                                             "family":  "剣戟",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-SWORD-DRAW-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-SWORD-TEMPLATE-003",
+                                             "title":  "剣戟・差し替え型",
+                                             "family":  "剣戟",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-SWORD-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     },
+                     {
+                         "name":  "レース・乗り物",
+                         "prompts":  [
+                                         {
+                                             "id":  "PRM-ACTION-VEHICLE-CHASE-002",
+                                             "title":  "バイクの市街地チェイス",
+                                             "family":  "レース・乗り物",
+                                             "tier":  "演出型",
+                                             "path":  "prompts/draft/PRM-ACTION-VEHICLE-CHASE-002.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-VEHICLE-CORNER-001",
+                                             "title":  "レースカーの高速コーナリング",
+                                             "family":  "レース・乗り物",
+                                             "tier":  "基本型",
+                                             "path":  "prompts/draft/PRM-ACTION-VEHICLE-CORNER-001.md"
+                                         },
+                                         {
+                                             "id":  "PRM-ACTION-VEHICLE-TEMPLATE-003",
+                                             "title":  "乗り物アクション・差し替え型",
+                                             "family":  "レース・乗り物",
+                                             "tier":  "差し替え型",
+                                             "path":  "prompts/draft/PRM-ACTION-VEHICLE-TEMPLATE-003.md"
+                                         }
+                                     ]
+                     }
+                 ]
+}

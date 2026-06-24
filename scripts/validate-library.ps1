@@ -120,6 +120,27 @@ foreach ($name in @('cards', 'modules', 'prompts')) {
     }
 }
 
+$actionHierarchyPath = Join-Path $root 'catalog/action-prompt-hierarchy.json'
+if (Test-Path -LiteralPath $actionHierarchyPath) {
+    $actionHierarchy = Read-JsonFile $actionHierarchyPath
+    if ($null -ne $actionHierarchy) {
+        if ($actionHierarchy.promptCount -ne 30) {
+            $errors.Add("Action hierarchy must contain 30 prompts: found $($actionHierarchy.promptCount)")
+        }
+        if (@($actionHierarchy.families).Count -ne 10) {
+            $errors.Add("Action hierarchy must contain 10 families: found $(@($actionHierarchy.families).Count)")
+        }
+        foreach ($family in $actionHierarchy.families) {
+            if (@($family.prompts).Count -ne 3) {
+                $errors.Add("Action family must contain 3 prompts: $($family.name) has $(@($family.prompts).Count)")
+            }
+            if (@($family.prompts.tier | Select-Object -Unique).Count -ne 3) {
+                $errors.Add("Action family must contain 3 distinct tiers: $($family.name)")
+            }
+        }
+    }
+}
+
 if ($errors.Count -gt 0) {
     Write-Host "Validation failed: $($errors.Count) error(s)" -ForegroundColor Red
     $errors | ForEach-Object { Write-Host "- $_" -ForegroundColor Red }

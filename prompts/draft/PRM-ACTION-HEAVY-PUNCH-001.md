@@ -2,11 +2,15 @@
 id: PRM-ACTION-HEAVY-PUNCH-001
 title: "重量感のある決定的な拳撃"
 source_ids: [SRC-20260625-ACTION, SRC-20260625-PSYCHOLOGY]
+source_group: "アクション性のあるイラスト表現技法"
+family: "重量級の一撃"
+tier: "基本型"
 card_ids: [CARD-ACTION-LINE, CARD-ACTION-KINETIC-CHAIN, CARD-ACTION-SELECTIVE-BLUR, CARD-ACTION-REACTION-VECTOR, CARD-ACTION-TIME-PHASE, CARD-PSY-FOCAL-HIERARCHY]
 module_ids: [MOD-BODY-ACTION-LINE, MOD-BODY-KINETIC-CHAIN, MOD-MOTION-SELECTIVE-BLUR, MOD-IMPACT-REACTION-VECTOR, MOD-TIME-DECISIVE-PHASE, MOD-COMPOSITION-FOCAL-HIERARCHY]
 goal_primary: 重量感
 goal_secondary: [迫力, 可読性]
 scene: [拳撃, 近接戦]
+phase: [命中, 振り抜き]
 model: generic
 status: draft
 version: 1

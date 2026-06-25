@@ -1,11 +1,11 @@
 {
     "schemaVersion":  1,
-    "updated":  "2026-06-25",
+    "updated":  "2026-06-26",
     "counts":  {
                    "sources":  3,
                    "cards":  22,
                    "modules":  17,
-                   "prompts":  32
+                   "prompts":  33
                },
     "cards":  [
                   {
@@ -300,17 +300,17 @@
                     {
                         "id":  "PRM-ACTION-SPEED-MELEE-001",
                         "path":  "prompts/draft/PRM-ACTION-SPEED-MELEE-001.md",
-                        "status":  "draft"
+                        "status":  "library"
                     },
                     {
                         "id":  "PRM-ACTION-SPEED-TELEPORT-002",
                         "path":  "prompts/draft/PRM-ACTION-SPEED-TELEPORT-002.md",
-                        "status":  "draft"
+                        "status":  "library"
                     },
                     {
                         "id":  "PRM-ACTION-SPEED-TEMPLATE-003",
                         "path":  "prompts/draft/PRM-ACTION-SPEED-TEMPLATE-003.md",
-                        "status":  "draft"
+                        "status":  "library"
                     },
                     {
                         "id":  "PRM-ACTION-SPORT-BASEBALL-001",
@@ -366,6 +366,11 @@
                         "id":  "PRM-STORY-SECOND-READ-001",
                         "path":  "prompts/draft/PRM-STORY-SECOND-READ-001.md",
                         "status":  "draft"
+                    },
+                    {
+                        "id":  "TPR-DEFAULT-CORRECTION-SUITE-001",
+                        "path":  "prompts/testing/TPR-DEFAULT-CORRECTION-SUITE-001.md",
+                        "status":  "testing"
                     }
                 ]
 }

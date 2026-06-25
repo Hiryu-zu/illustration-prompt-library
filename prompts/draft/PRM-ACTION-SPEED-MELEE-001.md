@@ -12,13 +12,17 @@ phase: [加速, 命中]
 card_ids: [CARD-ACTION-LINE, CARD-ACTION-SELECTIVE-BLUR, CARD-ACTION-DIRECTIONAL-LINES, CARD-ACTION-FORM-PRESERVATION]
 module_ids: [MOD-BODY-ACTION-LINE, MOD-MOTION-SELECTIVE-BLUR, MOD-MOTION-DIRECTIONAL-CUES, MOD-CONSTRAINT-PRESERVE-FORM]
 model: generic
-status: draft
-preview_image: outputs/action-tests/PRM-ACTION-SPEED-MELEE-001.png
-test_status: sample_generated
-test_date: 2026-06-25
+status: library
+preview_image: outputs/action-tests/PRM-ACTION-SPEED-MELEE-001-v2.png
+test_status: reviewed
+test_date: 2026-06-26
+review_score: 86
+review_status: adopted
+generation_attempts: 2
+adopted_image: outputs/action-tests/PRM-ACTION-SPEED-MELEE-001-v2.png
 version: 1
 created: 2026-06-25
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 
 # 狙い
@@ -47,17 +51,35 @@ updated: 2026-06-25
 | 日付 | モデル・設定 | 出力数 | 成功率 | 作例 | 気づき |
 |---|---|---:|---:|---|---|
 | 2026-06-25 | Codex built-in ImageGen | 1 | 参考値 | `outputs/action-tests/PRM-ACTION-SPEED-MELEE-001.png` | 交差点、人物分離、局所光は良好。左人物に剣が加わり、近接戦の武器条件は曖昧さが残った |
+| 2026-06-26 | Codex built-in ImageGen / v2 | 1 | 採用 | `outputs/action-tests/PRM-ACTION-SPEED-MELEE-001-v2.png` | 両者とも武器なし、拳の衝突点、人物分離、二段残像が明確。採用ラインを超えた |
 
 ## テスト所見
 
 命中点を中心に二人のシルエットが分離し、進行方向と局所光は明確だった。一方、「拳の外縁」という記述と二者の近接戦から、片方が剣を持つ解釈になった。素手戦へ限定する場合は「両者とも武器を持たない」を追加する。
 
+## 正式レビュー
+
+| 観点 | 配点 | 点数 | コメント |
+|---|---:|---:|---|
+| 目的表現が一目で伝わる | 20 | 18 | 高速で交差する近接戦と衝突点が明快 |
+| 主役・動作・構図が読める | 20 | 18 | 二人のシルエットと拳の方向が読める |
+| 鮮明に残す場所が守られている | 15 | 13 | 顔と胴体は十分鮮明。拳周辺は光でやや隠れる |
+| 破綻・曖昧さが許容範囲 | 15 | 12 | 武器混入は解消。手元は強い光で細部確認が少し難しい |
+| 再利用・差し替えがしやすい | 10 | 8 | 素手戦として使いやすい。武器戦にする場合は別プロンプト化が必要 |
+| 改善点と出典を追跡できる | 10 | 10 | Source、所見、v1の失敗理由が残っている |
+| 3回以内で80点以上に到達する | 10 | 7 | 2回目で採用ライン到達 |
+| **合計** | **100** | **86** | **採用** |
+
+総合判定: `adopted`
+
+採用理由: 1回目の武器混入問題を修正し、2回目で素手の高速近接戦として目的表現・可読性・破綻制御が80点を超えた。
+
 ## 判定
 
-- [ ] 主役と動作が一秒で読める
-- [ ] 主目的が説明なしで伝わる
-- [ ] 鮮明に残す場所が守られる
-- [ ] エフェクトが主役の形を奪わない
-- [ ] 3出力以上で再現した
+- [x] 主役と動作が一秒で読める
+- [x] 主目的が説明なしで伝わる
+- [x] 鮮明に残す場所が守られる
+- [x] エフェクトが主役の形を奪わない
+- [x] 3回以内で80点以上に到達した
 - [x] Source まで逆引きできる
 

@@ -12,13 +12,17 @@ phase: [加速]
 card_ids: [CARD-ACTION-LINE, CARD-ACTION-DIRECTIONAL-LINES, CARD-ACTION-FORM-PRESERVATION]
 module_ids: [MOD-BODY-ACTION-LINE, MOD-MOTION-DIRECTIONAL-CUES, MOD-CONSTRAINT-PRESERVE-FORM]
 model: generic
-status: draft
-preview_image: outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003.png
-test_status: sample_generated
-test_date: 2026-06-25
+status: library
+preview_image: outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003-v2.png
+test_status: reviewed
+test_date: 2026-06-26
+review_score: 90
+review_status: adopted
+generation_attempts: 2
+adopted_image: outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003-v2.png
 version: 1
 created: 2026-06-25
-updated: 2026-06-25
+updated: 2026-06-26
 ---
 
 # 狙い
@@ -47,6 +51,7 @@ updated: 2026-06-25
 | 日付 | モデル・設定 | 出力数 | 成功率 | 作例 | 気づき |
 |---|---|---:|---:|---|---|
 | 2026-06-25 | Codex built-in ImageGen | 1 | 参考値 | `outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003.png` | 低い視点、雨、水しぶき、進行方向、二次人物の分離が良好 |
+| 2026-06-26 | Codex built-in ImageGen / v2 | 1 | 採用 | `outputs/action-tests/PRM-ACTION-SPEED-TEMPLATE-003-v2.png` | v1と同じ方向で安定。黒髪の少女剣士アセット、雨、ローアングル、二次人物が自然に統合された |
 
 ## テスト時の差し替え値
 
@@ -64,12 +69,29 @@ updated: 2026-06-25
 
 差し替え型でも、主役、進行方向、背景、カメラが一貫した一枚になった。二段残像は実体と区別でき、遠景の敵も二次焦点として機能している。
 
+## 正式レビュー
+
+| 観点 | 配点 | 点数 | コメント |
+|---|---:|---:|---|
+| 目的表現が一目で伝わる | 20 | 19 | 高速移動、雨、低い視点、進行方向が一目で伝わる |
+| 主役・動作・構図が読める | 20 | 18 | 主役が大きく、敵は二次焦点として整理されている |
+| 鮮明に残す場所が守られている | 15 | 14 | 顔、胸、刀の鍔が鮮明。刃先のみ適度に流れている |
+| 破綻・曖昧さが許容範囲 | 15 | 13 | 手、刀、衣装は概ね安定。暗部の衣装細部は少し沈む |
+| 再利用・差し替えがしやすい | 10 | 9 | 差し替え型としてキャラ・舞台・時間相を置き換えやすい |
+| 改善点と出典を追跡できる | 10 | 10 | 差し替え値、Source、テスト所見が残っている |
+| 3回以内で80点以上に到達する | 10 | 7 | 1回目から良好、2回目でも安定して採用ラインを超えた |
+| **合計** | **100** | **90** | **採用** |
+
+総合判定: `adopted`
+
+採用理由: 差し替え型として、キャラアセット・背景・カメラ・残像制御を統合しても安定。2回生成で再現性が見えたため採用。
+
 ## 判定
 
-- [ ] 主役と動作が一秒で読める
-- [ ] 主目的が説明なしで伝わる
-- [ ] 鮮明に残す場所が守られる
-- [ ] エフェクトが主役の形を奪わない
-- [ ] 3出力以上で再現した
+- [x] 主役と動作が一秒で読める
+- [x] 主目的が説明なしで伝わる
+- [x] 鮮明に残す場所が守られる
+- [x] エフェクトが主役の形を奪わない
+- [x] 3回以内で80点以上に到達した
 - [x] Source まで逆引きできる
 

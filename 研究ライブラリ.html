@@ -71,7 +71,15 @@
     .preset-row,.check-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
     .preset{min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);cursor:pointer}
     .preset:hover,.preset:focus-visible{border-color:var(--accent);outline:none}
+    .composer-status{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 14px;color:var(--muted);font-size:.88rem}
+    .composer-count{padding:4px 9px;border:1px solid rgba(126,215,196,.55);border-radius:999px;background:rgba(126,215,196,.12);color:var(--accent2);font-weight:700}
+    .composer-flash{opacity:0;transition:opacity .18s ease;color:var(--accent2)}
+    .composer-flash.is-visible{opacity:1}
+    .active-chips{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 14px}
+    .chip{padding:4px 8px;border:1px solid rgba(126,215,196,.5);border-radius:999px;background:rgba(126,215,196,.1);color:var(--accent2);font-size:12px}
     .check{display:flex;gap:8px;align-items:flex-start;min-height:40px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:#211a2b;color:var(--text);cursor:pointer}
+    .check.is-on{border-color:rgba(126,215,196,.65);background:rgba(126,215,196,.12);box-shadow:inset 3px 0 var(--accent2)}
+    .check.is-off{opacity:.68}
     .check input{margin-top:3px;accent-color:var(--accent)}
     .check small{display:block;margin-top:2px;color:var(--muted);font-size:11px;line-height:1.4}
     .asset-options{display:grid;gap:10px;margin:12px 0 16px}
@@ -79,7 +87,16 @@
     .asset-field.is-open{display:block}
     .asset-field textarea{width:100%;min-height:70px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:10px;background:#100d15;color:var(--text);line-height:1.6}
     .assembled{position:relative;margin-top:14px}
-    .assembled pre{padding-top:52px}
+    .assembled-output{display:grid;gap:10px;margin:0;padding:52px 14px 14px;border:1px solid var(--line);border-radius:14px;background:#100d15;color:#f4eef9;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+    .prompt-block{padding:12px;border:1px solid var(--line);border-radius:12px;background:#17111f}
+    .prompt-block.base{border-color:rgba(189,130,255,.45)}
+    .prompt-block.asset{border-color:rgba(255,206,117,.45);background:rgba(255,206,117,.06)}
+    .prompt-block.correction{border-color:rgba(126,215,196,.7);background:rgba(126,215,196,.09)}
+    .prompt-block.negative{border-color:rgba(255,137,154,.58);background:rgba(255,137,154,.07)}
+    .block-title{display:block;margin-bottom:6px;font-family:system-ui,-apple-system,"Yu Gothic UI",sans-serif;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--accent)}
+    .prompt-block.correction .block-title{color:var(--accent2)}
+    .prompt-block.negative .block-title{color:#ffb1bd}
+    .prompt-block.asset .block-title{color:#ffd98f}
     .assembled-actions{position:absolute;top:9px;right:9px;display:flex;gap:8px}
     .assembled-actions button{min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);cursor:pointer}
     .assembled-actions button:hover,.assembled-actions button:focus-visible{border-color:var(--accent);outline:none}
@@ -178,6 +195,8 @@
         <h3>最終プロンプト組み立て</h3>
         <p class="composer-note">チェックをオンにした補正・アセットだけが下の統合プロンプトに入ります。オフにすると本文から消えます。</p>
         <div class="preset-row" aria-label="補正プリセット">${presets.map(p=>`<button class="preset" type="button" data-preset="${escapeHtml(p.id)}">${escapeHtml(p.label)}</button>`).join('')}</div>
+        <div class="composer-status"><span class="composer-count" data-selected-count>選択中の補正：0件</span><span class="composer-flash" data-composer-flash>統合プロンプトを更新しました</span></div>
+        <div class="active-chips" data-active-chips></div>
         <div class="check-grid" aria-label="デフォルト補正">${defs.map(d=>`<label class="check"><input type="checkbox" data-default-id="${escapeHtml(d.id)}" ${d.initial_checked?'checked':''}><span>${escapeHtml(d.label)}<small>${escapeHtml(d.default_state||'')}</small></span></label>`).join('')}</div>
         <div class="asset-options">
           <label class="check"><input type="checkbox" data-asset-toggle="reference"><span>参考画像を使う<small>画像名や使い方メモを統合プロンプトに追加</small></span></label>
@@ -189,9 +208,20 @@
         </div>
         <div class="assembled">
           <div class="assembled-actions"><button type="button" data-refresh-assembled>更新</button><button type="button" data-copy-target="assembledPrompt">コピー</button></div>
-          <pre><code id="assembledPrompt"></code></pre>
+          <div id="assembledPrompt" class="assembled-output" role="region" aria-label="生成される統合プロンプト"></div>
         </div>
       </section>`;
+    }
+    function syncCheckStyles(root){
+      root.querySelectorAll('.check').forEach(label=>{
+        const input=label.querySelector('input[type="checkbox"]');
+        if(!input)return;
+        label.classList.toggle('is-on',input.checked);
+        label.classList.toggle('is-off',!input.checked);
+      });
+    }
+    function renderPromptBlocks(sections){
+      return sections.map(s=>`<section class="prompt-block ${escapeHtml(s.kind)}"><span class="block-title">${escapeHtml(s.title)}</span>${escapeHtml(s.text)}</section>`).join('');
     }
     function updateAssetFields(root){
       root.querySelectorAll('[data-asset-toggle]').forEach(input=>{
@@ -206,16 +236,22 @@
       const parts=promptParts(entry),defs=state.defaults?.defaults||[];
       const enabled=[...root.querySelectorAll('[data-default-id]:checked')].map(x=>x.dataset.defaultId);
       const pos=[],neg=[];
-      defs.filter(d=>enabled.includes(d.id)).sort((a,b)=>(a.priority||0)-(b.priority||0)).forEach(d=>{pos.push(...(d.positive||[]));neg.push(...(d.negative||[]));});
+      const enabledDefs=defs.filter(d=>enabled.includes(d.id)).sort((a,b)=>(a.priority||0)-(b.priority||0));
+      enabledDefs.forEach(d=>{pos.push(...(d.positive||[]));neg.push(...(d.negative||[]));});
       const assetText=key=>root.querySelector(`[data-asset-text="${key}"]`)?.value.trim();
-      const sections=[`Base prompt:\n${parts.positive}`];
-      if(root.querySelector('[data-asset-toggle="character"]')?.checked&&assetText('character'))sections.push(`Character asset:\n${assetText('character')}`);
-      if(root.querySelector('[data-asset-toggle="world"]')?.checked&&assetText('world'))sections.push(`World / background asset:\n${assetText('world')}`);
-      if(root.querySelector('[data-asset-toggle="reference"]')?.checked&&assetText('reference'))sections.push(`Reference images:\n${assetText('reference')}`);
-      if(pos.length)sections.push(`Default corrections:\n${[...new Set(pos)].join(', ')}`);
+      const sections=[{kind:'base',title:'Base prompt',text:parts.positive}];
+      if(root.querySelector('[data-asset-toggle="character"]')?.checked&&assetText('character'))sections.push({kind:'asset',title:'Character asset',text:assetText('character')});
+      if(root.querySelector('[data-asset-toggle="world"]')?.checked&&assetText('world'))sections.push({kind:'asset',title:'World / background asset',text:assetText('world')});
+      if(root.querySelector('[data-asset-toggle="reference"]')?.checked&&assetText('reference'))sections.push({kind:'asset',title:'Reference images',text:assetText('reference')});
+      if(pos.length)sections.push({kind:'correction',title:'Default corrections',text:[...new Set(pos)].join(', ')});
       const negative=[parts.negative,...neg].filter(Boolean);
-      if(negative.length)sections.push(`Negative prompt:\n${[...new Set(negative.flatMap(x=>String(x).split(',').map(v=>v.trim()).filter(Boolean)))].join(', ')}`);
-      const out=root.querySelector('#assembledPrompt');if(out)out.textContent=sections.join('\n\n');
+      if(negative.length)sections.push({kind:'negative',title:'Negative prompt',text:[...new Set(negative.flatMap(x=>String(x).split(',').map(v=>v.trim()).filter(Boolean)))].join(', ')});
+      const plain=sections.map(s=>`${s.title}:\n${s.text}`).join('\n\n');
+      const out=root.querySelector('#assembledPrompt');if(out){out.innerHTML=renderPromptBlocks(sections);out.dataset.plain=plain}
+      const count=root.querySelector('[data-selected-count]');if(count)count.textContent=`選択中の補正：${enabledDefs.length}件`;
+      const chips=root.querySelector('[data-active-chips]');if(chips)chips.innerHTML=enabledDefs.map(d=>`<span class="chip">${escapeHtml(d.label)}</span>`).join('');
+      syncCheckStyles(root);
+      const flash=root.querySelector('[data-composer-flash]');if(flash){flash.classList.add('is-visible');clearTimeout(root._flashTimer);root._flashTimer=setTimeout(()=>flash.classList.remove('is-visible'),900)}
     }
     function filtered(){const q=state.query.trim().toLowerCase();return state.entries.filter(e=>e.type===state.type&&(!q||`${e.meta.title} ${e.meta.id} ${e.text}`.toLowerCase().includes(q)))}
     function renderList(){const found=filtered();g('summary').textContent=`${found.length}件`;if(!found.length){g('items').innerHTML='<div class="empty">該当する資料がありません。</div>';return}const familyOrder=['高速戦・瞬間移動','重量級の一撃','武術・格闘技','剣戟','銃撃・射撃戦','魔法・必殺技','巨大怪獣・巨大ロボ','スポーツ','ダンス・舞踏','レース・乗り物'];const tierOrder=['基本型','演出型','差し替え型'];const sorted=[...found].sort((a,b)=>{if(state.type!=='prompts')return String(a.meta.title).localeCompare(String(b.meta.title),'ja');const af=familyOrder.indexOf(a.meta.family),bf=familyOrder.indexOf(b.meta.family);if(af!==bf)return (af<0?999:af)-(bf<0?999:bf);return tierOrder.indexOf(a.meta.tier)-tierOrder.indexOf(b.meta.tier)});let last='';g('items').innerHTML=sorted.map(e=>{const family=state.type==='prompts'?(e.meta.family||'その他'):'';const heading=family&&family!==last?`<div class="group">${escapeHtml(family)}</div>`:'';last=family;return heading+`<button class="item ${state.selected===e.meta.id?'active':''}" data-id="${escapeHtml(e.meta.id)}"><span class="item-title">${escapeHtml(e.meta.title||e.meta.id)}</span><span class="item-id">${escapeHtml(e.meta.id)}</span><span class="badges">${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</span></button>`}).join('');}
@@ -224,7 +260,7 @@
     async function init(){try{const [index,defaults]=await Promise.all([fetch('./catalog/'+encodeURIComponent('ライブラリ索引.json')).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}),fetch('./defaults/default-corrections.json').then(r=>r.ok?r.json():null).catch(()=>null)]);state.defaults=defaults;const jobs=[];['prompts','modules','cards'].forEach(type=>(index[type]||[]).forEach(entry=>jobs.push(fetch('./'+entry.path.split('/').map(encodeURIComponent).join('/')).then(r=>r.text()).then(text=>{const parsed=parseFrontMatter(text);return{type,text,body:parsed.body,meta:{...parsed.meta,id:parsed.meta.id||entry.id}}}))));state.entries=await Promise.all(jobs);renderList();const hash=decodeURIComponent(location.hash.slice(1));const hashed=state.entries.find(e=>e.meta.id===hash);if(hashed)select(hashed.meta.id,false);else if(innerWidth>760){const first=filtered()[0];if(first)select(first.meta.id,false)}}catch(err){g('summary').textContent='読み込み失敗';g('items').innerHTML='<div class="empty error">ライブラリを読み込めませんでした。Pages上から開き直してください。</div>';console.error(err)}}
     document.addEventListener('input',e=>{if(e.target.closest('.composer'))assemblePrompt()});
     document.addEventListener('change',e=>{if(e.target.closest('.composer'))assemblePrompt()});
-    document.addEventListener('click',e=>{const item=e.target.closest('[data-id]');if(item)select(item.dataset.id);const tab=e.target.closest('.tab');if(tab){state.type=tab.dataset.type;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));state.selected=null;g('layout').classList.remove('show-detail');renderList();const first=filtered()[0];if(first&&innerWidth>760)select(first.meta.id)}const preset=e.target.closest('[data-preset]');if(preset){const p=(state.defaults?.presets||[]).find(x=>x.id===preset.dataset.preset);if(p){document.querySelectorAll('[data-default-id]').forEach(input=>input.checked=p.enabled_defaults.includes(input.dataset.defaultId));assemblePrompt()}}const refresh=e.target.closest('[data-refresh-assembled]');if(refresh)assemblePrompt();const target=e.target.closest('[data-copy-target]');if(target){const el=document.getElementById(target.dataset.copyTarget);if(el)copyText(el.textContent,target)}const copy=e.target.closest('[data-copy]');if(copy)copyText(copy.dataset.copy,copy);if(e.target.id==='mobileBack')g('layout').classList.remove('show-detail')});
+    document.addEventListener('click',e=>{const item=e.target.closest('[data-id]');if(item)select(item.dataset.id);const tab=e.target.closest('.tab');if(tab){state.type=tab.dataset.type;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));state.selected=null;g('layout').classList.remove('show-detail');renderList();const first=filtered()[0];if(first&&innerWidth>760)select(first.meta.id)}const preset=e.target.closest('[data-preset]');if(preset){const p=(state.defaults?.presets||[]).find(x=>x.id===preset.dataset.preset);if(p){document.querySelectorAll('[data-default-id]').forEach(input=>input.checked=p.enabled_defaults.includes(input.dataset.defaultId));assemblePrompt()}}const refresh=e.target.closest('[data-refresh-assembled]');if(refresh)assemblePrompt();const target=e.target.closest('[data-copy-target]');if(target){const el=document.getElementById(target.dataset.copyTarget);if(el)copyText(el.dataset.plain||el.textContent,target)}const copy=e.target.closest('[data-copy]');if(copy)copyText(copy.dataset.copy,copy);if(e.target.id==='mobileBack')g('layout').classList.remove('show-detail')});
     g('search').addEventListener('input',e=>{state.query=e.target.value;renderList()});
     init();
   </script>

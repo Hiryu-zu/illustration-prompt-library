@@ -65,6 +65,24 @@
     pre{margin:0;padding:18px;padding-top:48px;border:1px solid var(--line);border-radius:14px;background:#100d15;color:#f4eef9;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
     .copy{position:absolute;top:9px;right:9px;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);cursor:pointer}
     .copy:hover,.copy:focus-visible{border-color:var(--accent);outline:none}
+    .composer{margin:0 0 28px;padding:18px;border:1px solid rgba(126,215,196,.45);border-radius:16px;background:#1b1624}
+    .composer h3{margin:0 0 8px;font-size:1.05rem;color:var(--accent2)}
+    .composer-note{margin:0 0 14px;color:var(--muted);font-size:.9rem;line-height:1.6}
+    .preset-row,.check-grid{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+    .preset{min-height:36px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);cursor:pointer}
+    .preset:hover,.preset:focus-visible{border-color:var(--accent);outline:none}
+    .check{display:flex;gap:8px;align-items:flex-start;min-height:40px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:#211a2b;color:var(--text);cursor:pointer}
+    .check input{margin-top:3px;accent-color:var(--accent)}
+    .check small{display:block;margin-top:2px;color:var(--muted);font-size:11px;line-height:1.4}
+    .asset-options{display:grid;gap:10px;margin:12px 0 16px}
+    .asset-field{display:none;margin:8px 0 0 25px}
+    .asset-field.is-open{display:block}
+    .asset-field textarea{width:100%;min-height:70px;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:10px;background:#100d15;color:var(--text);line-height:1.6}
+    .assembled{position:relative;margin-top:14px}
+    .assembled pre{padding-top:52px}
+    .assembled-actions{position:absolute;top:9px;right:9px;display:flex;gap:8px}
+    .assembled-actions button{min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);cursor:pointer}
+    .assembled-actions button:hover,.assembled-actions button:focus-visible{border-color:var(--accent);outline:none}
     .table-wrap{overflow-x:auto;margin:16px 0 22px}
     table{width:100%;border-collapse:collapse;font-size:.9rem}
     th,td{padding:10px;border:1px solid var(--line);text-align:left;vertical-align:top}
@@ -107,7 +125,7 @@
   </main>
 
   <script>
-    const state={type:'prompts',query:'',entries:[],selected:null};
+    const state={type:'prompts',query:'',entries:[],selected:null,defaults:null};
     const g=id=>document.getElementById(id);
     const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const inline=s=>escapeHtml(s).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');
@@ -142,12 +160,71 @@
     }
 
     function tags(meta){return [meta.tier,meta.family,meta.goal_primary,...(meta.goal_secondary||[]),...(meta.goal||[]),...(meta.control||[]),...(meta.scene||[]),...(meta.phase||[])].filter((v,i,a)=>v&&a.indexOf(v)===i).slice(0,7)}
+    function firstCodeAfter(body,heading){
+      const idx=body.indexOf(heading);const part=idx>=0?body.slice(idx):body;
+      const m=part.match(/```(?:text)?\s*\n([\s\S]*?)\n```/);return m?m[1].trim():'';
+    }
+    function promptParts(entry){
+      return {
+        positive:firstCodeAfter(entry.body,'## 完成プロンプト')||firstCodeAfter(entry.body,'```'),
+        negative:firstCodeAfter(entry.body,'## ネガティブ')||''
+      };
+    }
+    function buildComposer(entry){
+      if(state.type!=='prompts'||!state.defaults?.defaults?.length)return '';
+      const presets=state.defaults.presets||[];
+      const defs=[...state.defaults.defaults].sort((a,b)=>(a.priority||0)-(b.priority||0));
+      return `<section class="composer" data-composer="${escapeHtml(entry.meta.id)}">
+        <h3>最終プロンプト組み立て</h3>
+        <p class="composer-note">チェックをオンにした補正・アセットだけが下の統合プロンプトに入ります。オフにすると本文から消えます。</p>
+        <div class="preset-row" aria-label="補正プリセット">${presets.map(p=>`<button class="preset" type="button" data-preset="${escapeHtml(p.id)}">${escapeHtml(p.label)}</button>`).join('')}</div>
+        <div class="check-grid" aria-label="デフォルト補正">${defs.map(d=>`<label class="check"><input type="checkbox" data-default-id="${escapeHtml(d.id)}" ${d.initial_checked?'checked':''}><span>${escapeHtml(d.label)}<small>${escapeHtml(d.default_state||'')}</small></span></label>`).join('')}</div>
+        <div class="asset-options">
+          <label class="check"><input type="checkbox" data-asset-toggle="reference"><span>参考画像を使う<small>画像名や使い方メモを統合プロンプトに追加</small></span></label>
+          <div class="asset-field" data-asset-field="reference"><textarea data-asset-text="reference" placeholder="例: character_front_001 をキャラ同一性の参照にする。pose_sprint_low_angle_001 を低角度の走りポーズ参照にする。"></textarea></div>
+          <label class="check"><input type="checkbox" data-asset-toggle="character"><span>キャラクターアセットを追加する<small>専用キャラの外見・雰囲気・固有衣装を追加</small></span></label>
+          <div class="asset-field" data-asset-field="character"><textarea data-asset-text="character" placeholder="例: 黒髪の少女剣士。長い黒髪、黒いロングコート、細身の刀、冷静だが緊張感のある表情。"></textarea></div>
+          <label class="check"><input type="checkbox" data-asset-toggle="world"><span>背景・世界観アセットを追加する<small>舞台、光、色、世界観メモを追加</small></span></label>
+          <div class="asset-field" data-asset-field="world"><textarea data-asset-text="world" placeholder="例: 雨の裏路地、青白い逆光、濡れた路面の反射、紙片が風で流れる。"></textarea></div>
+        </div>
+        <div class="assembled">
+          <div class="assembled-actions"><button type="button" data-refresh-assembled>更新</button><button type="button" data-copy-target="assembledPrompt">コピー</button></div>
+          <pre><code id="assembledPrompt"></code></pre>
+        </div>
+      </section>`;
+    }
+    function updateAssetFields(root){
+      root.querySelectorAll('[data-asset-toggle]').forEach(input=>{
+        const field=root.querySelector(`[data-asset-field="${CSS.escape(input.dataset.assetToggle)}"]`);
+        if(field)field.classList.toggle('is-open',input.checked);
+      });
+    }
+    function assemblePrompt(){
+      const root=document.querySelector('.composer');if(!root)return;
+      const entry=state.entries.find(x=>x.meta.id===state.selected);if(!entry)return;
+      updateAssetFields(root);
+      const parts=promptParts(entry),defs=state.defaults?.defaults||[];
+      const enabled=[...root.querySelectorAll('[data-default-id]:checked')].map(x=>x.dataset.defaultId);
+      const pos=[],neg=[];
+      defs.filter(d=>enabled.includes(d.id)).sort((a,b)=>(a.priority||0)-(b.priority||0)).forEach(d=>{pos.push(...(d.positive||[]));neg.push(...(d.negative||[]));});
+      const assetText=key=>root.querySelector(`[data-asset-text="${key}"]`)?.value.trim();
+      const sections=[`Base prompt:\n${parts.positive}`];
+      if(root.querySelector('[data-asset-toggle="character"]')?.checked&&assetText('character'))sections.push(`Character asset:\n${assetText('character')}`);
+      if(root.querySelector('[data-asset-toggle="world"]')?.checked&&assetText('world'))sections.push(`World / background asset:\n${assetText('world')}`);
+      if(root.querySelector('[data-asset-toggle="reference"]')?.checked&&assetText('reference'))sections.push(`Reference images:\n${assetText('reference')}`);
+      if(pos.length)sections.push(`Default corrections:\n${[...new Set(pos)].join(', ')}`);
+      const negative=[parts.negative,...neg].filter(Boolean);
+      if(negative.length)sections.push(`Negative prompt:\n${[...new Set(negative.flatMap(x=>String(x).split(',').map(v=>v.trim()).filter(Boolean)))].join(', ')}`);
+      const out=root.querySelector('#assembledPrompt');if(out)out.textContent=sections.join('\n\n');
+    }
     function filtered(){const q=state.query.trim().toLowerCase();return state.entries.filter(e=>e.type===state.type&&(!q||`${e.meta.title} ${e.meta.id} ${e.text}`.toLowerCase().includes(q)))}
     function renderList(){const found=filtered();g('summary').textContent=`${found.length}件`;if(!found.length){g('items').innerHTML='<div class="empty">該当する資料がありません。</div>';return}const familyOrder=['高速戦・瞬間移動','重量級の一撃','武術・格闘技','剣戟','銃撃・射撃戦','魔法・必殺技','巨大怪獣・巨大ロボ','スポーツ','ダンス・舞踏','レース・乗り物'];const tierOrder=['基本型','演出型','差し替え型'];const sorted=[...found].sort((a,b)=>{if(state.type!=='prompts')return String(a.meta.title).localeCompare(String(b.meta.title),'ja');const af=familyOrder.indexOf(a.meta.family),bf=familyOrder.indexOf(b.meta.family);if(af!==bf)return (af<0?999:af)-(bf<0?999:bf);return tierOrder.indexOf(a.meta.tier)-tierOrder.indexOf(b.meta.tier)});let last='';g('items').innerHTML=sorted.map(e=>{const family=state.type==='prompts'?(e.meta.family||'その他'):'';const heading=family&&family!==last?`<div class="group">${escapeHtml(family)}</div>`:'';last=family;return heading+`<button class="item ${state.selected===e.meta.id?'active':''}" data-id="${escapeHtml(e.meta.id)}"><span class="item-title">${escapeHtml(e.meta.title||e.meta.id)}</span><span class="item-id">${escapeHtml(e.meta.id)}</span><span class="badges">${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</span></button>`}).join('');}
-    function select(id,push=true){const e=state.entries.find(x=>x.meta.id===id);if(!e)return;state.selected=id;renderList();const preview=e.meta.preview_image?`<figure class="preview-wrap"><a href="./${escapeHtml(e.meta.preview_image)}" target="_blank" rel="noopener"><img class="preview" src="./${escapeHtml(e.meta.preview_image)}" alt="${escapeHtml(e.meta.title||e.meta.id)}のテスト生成作例" loading="lazy"></a><figcaption class="preview-caption">Codexによるテスト生成作例。クリックすると原寸画像を開きます。</figcaption></figure>`:'';g('detail').innerHTML=`<button class="mobile-back" id="mobileBack" type="button">← 一覧へ戻る</button><div class="doc-id">${escapeHtml(e.meta.id)}</div><h2 class="doc-title">${escapeHtml(e.meta.title||e.meta.id)}</h2><div class="doc-meta"><span class="badge status">${escapeHtml(e.meta.status||'')}</span>${e.meta.preview_image?'<span class="badge status">作例あり</span>':''}${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</div>${preview}<div class="content">${renderMarkdown(e.body)}</div>`;g('layout').classList.add('show-detail');if(push)history.replaceState(null,'','#'+encodeURIComponent(id));window.scrollTo({top:0,behavior:'smooth'});}
+    function select(id,push=true){const e=state.entries.find(x=>x.meta.id===id);if(!e)return;state.selected=id;renderList();const preview=e.meta.preview_image?`<figure class="preview-wrap"><a href="./${escapeHtml(e.meta.preview_image)}" target="_blank" rel="noopener"><img class="preview" src="./${escapeHtml(e.meta.preview_image)}" alt="${escapeHtml(e.meta.title||e.meta.id)}のテスト生成作例" loading="lazy"></a><figcaption class="preview-caption">Codexによるテスト生成作例。クリックすると原寸画像を開きます。</figcaption></figure>`:'';g('detail').innerHTML=`<button class="mobile-back" id="mobileBack" type="button">← 一覧へ戻る</button><div class="doc-id">${escapeHtml(e.meta.id)}</div><h2 class="doc-title">${escapeHtml(e.meta.title||e.meta.id)}</h2><div class="doc-meta"><span class="badge status">${escapeHtml(e.meta.status||'')}</span>${e.meta.preview_image?'<span class="badge status">作例あり</span>':''}${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</div>${preview}${buildComposer(e)}<div class="content">${renderMarkdown(e.body)}</div>`;g('layout').classList.add('show-detail');assemblePrompt();if(push)history.replaceState(null,'','#'+encodeURIComponent(id));window.scrollTo({top:0,behavior:'smooth'});}
     async function copyText(text,button){await navigator.clipboard.writeText(text);const old=button.textContent;button.textContent='コピー済み';setTimeout(()=>button.textContent=old,1200)}
-    async function init(){try{const index=await fetch('./catalog/'+encodeURIComponent('ライブラリ索引.json')).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()});const jobs=[];['prompts','modules','cards'].forEach(type=>(index[type]||[]).forEach(entry=>jobs.push(fetch('./'+entry.path.split('/').map(encodeURIComponent).join('/')).then(r=>r.text()).then(text=>{const parsed=parseFrontMatter(text);return{type,text,body:parsed.body,meta:{...parsed.meta,id:parsed.meta.id||entry.id}}}))));state.entries=await Promise.all(jobs);renderList();const hash=decodeURIComponent(location.hash.slice(1));const hashed=state.entries.find(e=>e.meta.id===hash);if(hashed)select(hashed.meta.id,false);else if(innerWidth>760){const first=filtered()[0];if(first)select(first.meta.id,false)}}catch(err){g('summary').textContent='読み込み失敗';g('items').innerHTML='<div class="empty error">ライブラリを読み込めませんでした。Pages上から開き直してください。</div>';console.error(err)}}
-    document.addEventListener('click',e=>{const item=e.target.closest('[data-id]');if(item)select(item.dataset.id);const tab=e.target.closest('.tab');if(tab){state.type=tab.dataset.type;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));state.selected=null;g('layout').classList.remove('show-detail');renderList();const first=filtered()[0];if(first&&innerWidth>760)select(first.meta.id)}const copy=e.target.closest('[data-copy]');if(copy)copyText(copy.dataset.copy,copy);if(e.target.id==='mobileBack')g('layout').classList.remove('show-detail')});
+    async function init(){try{const [index,defaults]=await Promise.all([fetch('./catalog/'+encodeURIComponent('ライブラリ索引.json')).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}),fetch('./defaults/default-corrections.json').then(r=>r.ok?r.json():null).catch(()=>null)]);state.defaults=defaults;const jobs=[];['prompts','modules','cards'].forEach(type=>(index[type]||[]).forEach(entry=>jobs.push(fetch('./'+entry.path.split('/').map(encodeURIComponent).join('/')).then(r=>r.text()).then(text=>{const parsed=parseFrontMatter(text);return{type,text,body:parsed.body,meta:{...parsed.meta,id:parsed.meta.id||entry.id}}}))));state.entries=await Promise.all(jobs);renderList();const hash=decodeURIComponent(location.hash.slice(1));const hashed=state.entries.find(e=>e.meta.id===hash);if(hashed)select(hashed.meta.id,false);else if(innerWidth>760){const first=filtered()[0];if(first)select(first.meta.id,false)}}catch(err){g('summary').textContent='読み込み失敗';g('items').innerHTML='<div class="empty error">ライブラリを読み込めませんでした。Pages上から開き直してください。</div>';console.error(err)}}
+    document.addEventListener('input',e=>{if(e.target.closest('.composer'))assemblePrompt()});
+    document.addEventListener('change',e=>{if(e.target.closest('.composer'))assemblePrompt()});
+    document.addEventListener('click',e=>{const item=e.target.closest('[data-id]');if(item)select(item.dataset.id);const tab=e.target.closest('.tab');if(tab){state.type=tab.dataset.type;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));state.selected=null;g('layout').classList.remove('show-detail');renderList();const first=filtered()[0];if(first&&innerWidth>760)select(first.meta.id)}const preset=e.target.closest('[data-preset]');if(preset){const p=(state.defaults?.presets||[]).find(x=>x.id===preset.dataset.preset);if(p){document.querySelectorAll('[data-default-id]').forEach(input=>input.checked=p.enabled_defaults.includes(input.dataset.defaultId));assemblePrompt()}}const refresh=e.target.closest('[data-refresh-assembled]');if(refresh)assemblePrompt();const target=e.target.closest('[data-copy-target]');if(target){const el=document.getElementById(target.dataset.copyTarget);if(el)copyText(el.textContent,target)}const copy=e.target.closest('[data-copy]');if(copy)copyText(copy.dataset.copy,copy);if(e.target.id==='mobileBack')g('layout').classList.remove('show-detail')});
     g('search').addEventListener('input',e=>{state.query=e.target.value;renderList()});
     init();
   </script>

@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1",
+  "asset_fields": {
+    "id": "string",
+    "asset_type": "character | costume | background | world | lighting | composition | negative | reference_image | finished_image",
+    "title": "string",
+    "status": "draft | testing | library | albumed",
+    "prompt_positive": "string",
+    "prompt_negative": "string",
+    "reference_images": [
+      {
+        "id": "string",
+        "path": "string",
+        "role": "character_identity | costume | pose | expression | background | lighting",
+        "usage_note": "string"
+      }
+    ],
+    "notes": "string"
+  }
+}

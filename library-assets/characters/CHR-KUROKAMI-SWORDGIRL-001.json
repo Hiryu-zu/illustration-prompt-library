@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1",
+  "id": "CHR-KUROKAMI-SWORDGIRL-001",
+  "asset_type": "character",
+  "title": "黒髪の少女剣士",
+  "status": "testing",
+  "prompt_positive": "a young female swordswoman with long black hair, sharp but calm eyes, slim athletic build, black long coat with clean layered fabric, dark fitted battle outfit, a slender katana, composed expression with quiet tension, elegant but dangerous presence",
+  "prompt_negative": "inconsistent hairstyle, different hair color, bulky armor, oversized weapon, childish proportions, melted coat, floating sword, unreadable character identity",
+  "reference_images": [
+    {
+      "id": "character_front_001",
+      "path": "",
+      "role": "character_identity",
+      "usage_note": "キャラクター正面設定を追加したら、顔・髪型・衣装の同一性参照として使う。"
+    },
+    {
+      "id": "costume_black_coat_001",
+      "path": "",
+      "role": "costume",
+      "usage_note": "黒いロングコートと戦闘衣装の一貫性参照として使う。"
+    }
+  ],
+  "notes": "高速戦・剣戟・雨の路地・キービジュアル系のテスト用初期キャラクター。現時点では参考画像未登録のため、プロンプトアセットとして利用する。"
+}

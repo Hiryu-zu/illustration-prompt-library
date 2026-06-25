@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1",
+  "characters": [
+    {
+      "id": "CHR-KUROKAMI-SWORDGIRL-001",
+      "title": "黒髪の少女剣士",
+      "path": "library-assets/characters/CHR-KUROKAMI-SWORDGIRL-001.json"
+    }
+  ]
+}

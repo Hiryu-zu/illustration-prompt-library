@@ -1,0 +1,294 @@
+{
+  "schema_version": "0.1",
+  "description": "書庫プロンプトに後付けできるデフォルト補正。UIではオンの時だけpositive/negativeを最終プロンプトへ挿入し、オフの時は完全に除外する。",
+  "merge_policy": {
+    "positive_joiner": ", ",
+    "negative_joiner": ", ",
+    "ui_behavior": "include_when_on_hide_when_off",
+    "order": [
+      "base_prompt",
+      "asset_character",
+      "asset_costume",
+      "asset_world",
+      "reference_image_notes",
+      "default_positive",
+      "generation_purpose",
+      "default_negative"
+    ]
+  },
+  "defaults": [
+    {
+      "id": "DEF-HANDS-001",
+      "label": "手・指を安定させる",
+      "category": "anatomy",
+      "default_state": "on",
+      "initial_checked": true,
+      "priority": 10,
+      "positive": [
+        "natural hands",
+        "clear finger separation",
+        "visible thumb placement",
+        "relaxed fingers following the action"
+      ],
+      "negative": [
+        "extra fingers",
+        "missing fingers",
+        "fused fingers",
+        "broken hands",
+        "twisted wrists"
+      ],
+      "turn_on_when": [
+        "hands are visible",
+        "character holds a weapon or prop",
+        "portrait includes hands near the face",
+        "full body or action pose"
+      ],
+      "turn_off_when": [
+        "hands are fully hidden",
+        "only landscape, object, or creature silhouette is generated",
+        "model output becomes stiff because finger constraints are too strong"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    },
+    {
+      "id": "DEF-POSE-001",
+      "label": "姿勢・骨格を安定させる",
+      "category": "anatomy",
+      "default_state": "on",
+      "initial_checked": true,
+      "priority": 20,
+      "positive": [
+        "balanced anatomy",
+        "natural spine curve",
+        "correct shoulder and hip alignment",
+        "stable center of gravity"
+      ],
+      "negative": [
+        "twisted limbs",
+        "broken anatomy",
+        "dislocated shoulders",
+        "impossible pose"
+      ],
+      "turn_on_when": [
+        "full body is visible",
+        "dynamic action pose",
+        "sports, dance, battle, or running scene"
+      ],
+      "turn_off_when": [
+        "abstract effect illustration",
+        "only face close-up",
+        "deliberately surreal body distortion is desired"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    },
+    {
+      "id": "DEF-SILHOUETTE-001",
+      "label": "主役のシルエットを読みやすくする",
+      "category": "composition",
+      "default_state": "on",
+      "initial_checked": true,
+      "priority": 30,
+      "positive": [
+        "clear readable silhouette",
+        "unobstructed main subject",
+        "clean separation between subject and background",
+        "readable pose at first glance"
+      ],
+      "negative": [
+        "cluttered composition",
+        "subject hidden by effects",
+        "unreadable pose",
+        "overlapping limbs that obscure the action"
+      ],
+      "turn_on_when": [
+        "action illustration",
+        "thumbnail readability matters",
+        "the image will be used as a key visual"
+      ],
+      "turn_off_when": [
+        "dense crowd scene is the main goal",
+        "horror or mystery scene intentionally hides the subject"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    },
+    {
+      "id": "DEF-FACE-001",
+      "label": "顔・目の崩れを防ぐ",
+      "category": "face",
+      "default_state": "conditional",
+      "initial_checked": false,
+      "priority": 40,
+      "positive": [
+        "well-proportioned face",
+        "symmetrical eyes",
+        "clear pupils",
+        "natural facial structure"
+      ],
+      "negative": [
+        "distorted face",
+        "asymmetrical eyes",
+        "misaligned pupils",
+        "duplicated face"
+      ],
+      "turn_on_when": [
+        "portrait",
+        "upper body shot",
+        "face is a primary emotional focus",
+        "character expression matters"
+      ],
+      "turn_off_when": [
+        "face is tiny, hidden, masked, or turned away",
+        "helmet or monster design should override human facial balance",
+        "strong facial symmetry makes the expression less natural"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    },
+    {
+      "id": "DEF-COSTUME-001",
+      "label": "衣装破綻を防ぐ",
+      "category": "costume",
+      "default_state": "on",
+      "initial_checked": true,
+      "priority": 50,
+      "positive": [
+        "consistent clothing design",
+        "readable costume layers",
+        "clean seams",
+        "accessories attached logically"
+      ],
+      "negative": [
+        "melted clothing",
+        "inconsistent costume details",
+        "floating accessories",
+        "messy seams"
+      ],
+      "turn_on_when": [
+        "character has a named costume",
+        "multiple clothing layers",
+        "album output should preserve character identity"
+      ],
+      "turn_off_when": [
+        "loose painterly costume interpretation is desired",
+        "simple silhouette-only clothing",
+        "the prompt already contains strict costume reference text"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    },
+    {
+      "id": "DEF-ACTION-BALANCE-001",
+      "label": "アクションの重心と勢いを保つ",
+      "category": "action",
+      "default_state": "conditional",
+      "initial_checked": false,
+      "priority": 60,
+      "positive": [
+        "dynamic but physically readable action",
+        "clear motion direction",
+        "weight transfer visible through the body",
+        "motion blur only on fast-moving parts"
+      ],
+      "negative": [
+        "random motion blur",
+        "floating body",
+        "unclear impact direction",
+        "blurred main face and torso"
+      ],
+      "turn_on_when": [
+        "battle, sports, dance, vehicle, or chase prompt",
+        "speed or impact is the core expression",
+        "the base prompt uses motion blur"
+      ],
+      "turn_off_when": [
+        "still pose",
+        "calm portrait",
+        "motion blur should be intentionally chaotic"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    },
+    {
+      "id": "DEF-STRONG-NEGATIVE-001",
+      "label": "強めのNG指定を入れる",
+      "category": "negative",
+      "default_state": "off",
+      "initial_checked": false,
+      "priority": 90,
+      "positive": [],
+      "negative": [
+        "low quality",
+        "worst quality",
+        "deformed anatomy",
+        "bad proportions",
+        "duplicate body",
+        "extra limbs",
+        "watermark",
+        "text artifacts"
+      ],
+      "turn_on_when": [
+        "output repeatedly breaks",
+        "album quality is prioritized over expressive looseness",
+        "the target model responds well to negative prompts"
+      ],
+      "turn_off_when": [
+        "the model ignores or overreacts to negative prompts",
+        "style becomes stiff or generic",
+        "creative exploration is prioritized"
+      ],
+      "test_prompt_id": "TPR-DEFAULT-CORRECTION-SUITE-001"
+    }
+  ],
+  "presets": [
+    {
+      "id": "PRESET-LIGHT",
+      "label": "軽め補正",
+      "enabled_defaults": [
+        "DEF-HANDS-001",
+        "DEF-POSE-001",
+        "DEF-SILHOUETTE-001"
+      ]
+    },
+    {
+      "id": "PRESET-STANDARD",
+      "label": "標準補正",
+      "enabled_defaults": [
+        "DEF-HANDS-001",
+        "DEF-POSE-001",
+        "DEF-SILHOUETTE-001",
+        "DEF-COSTUME-001"
+      ]
+    },
+    {
+      "id": "PRESET-ACTION",
+      "label": "アクション向け",
+      "enabled_defaults": [
+        "DEF-HANDS-001",
+        "DEF-POSE-001",
+        "DEF-SILHOUETTE-001",
+        "DEF-COSTUME-001",
+        "DEF-ACTION-BALANCE-001"
+      ]
+    },
+    {
+      "id": "PRESET-PORTRAIT",
+      "label": "ポートレート向け",
+      "enabled_defaults": [
+        "DEF-HANDS-001",
+        "DEF-FACE-001",
+        "DEF-COSTUME-001",
+        "DEF-SILHOUETTE-001"
+      ]
+    },
+    {
+      "id": "PRESET-STRICT",
+      "label": "厳密補正",
+      "enabled_defaults": [
+        "DEF-HANDS-001",
+        "DEF-POSE-001",
+        "DEF-SILHOUETTE-001",
+        "DEF-FACE-001",
+        "DEF-COSTUME-001",
+        "DEF-ACTION-BALANCE-001",
+        "DEF-STRONG-NEGATIVE-001"
+      ]
+    }
+  ]
+}

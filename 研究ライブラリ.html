@@ -101,6 +101,16 @@
     .assembled-actions{position:absolute;top:9px;right:9px;display:flex;gap:8px}
     .assembled-actions button{min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);cursor:pointer}
     .assembled-actions button:hover,.assembled-actions button:focus-visible{border-color:var(--accent);outline:none}
+    .review-panel{margin:0 0 28px;padding:18px;border:1px solid rgba(189,130,255,.45);border-radius:16px;background:#1b1526}
+    .review-panel h3{margin:0 0 8px;font-size:1.05rem;color:var(--accent)}
+    .review-summary{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}
+    .review-pill{padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel2);color:var(--muted);font-size:12px}
+    .review-pill.strong{border-color:rgba(126,215,196,.55);background:rgba(126,215,196,.1);color:var(--accent2);font-weight:700}
+    .score-list{display:grid;gap:8px;margin-top:12px}
+    .score-row{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:#211a2b}
+    .score-points{min-width:46px;text-align:center;color:#1a1022;background:var(--accent);border-radius:999px;font-weight:800}
+    .score-title{display:block;font-weight:700}
+    .score-desc{display:block;margin-top:3px;color:var(--muted);font-size:12px;line-height:1.5}
     .table-wrap{overflow-x:auto;margin:16px 0 22px}
     table{width:100%;border-collapse:collapse;font-size:.9rem}
     th,td{padding:10px;border:1px solid var(--line);text-align:left;vertical-align:top}
@@ -143,7 +153,7 @@
   </main>
 
   <script>
-    const state={type:'prompts',query:'',entries:[],selected:null,defaults:null,assets:{characters:[]}};
+    const state={type:'prompts',query:'',entries:[],selected:null,defaults:null,rubric:null,assets:{characters:[]}};
     const g=id=>document.getElementById(id);
     const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const inline=s=>escapeHtml(s).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>');
@@ -187,6 +197,24 @@
         positive:firstCodeAfter(entry.body,'## 完成プロンプト')||firstCodeAfter(entry.body,'```'),
         negative:firstCodeAfter(entry.body,'## ネガティブ')||''
       };
+    }
+    function buildReviewPanel(entry){
+      const rubric=state.rubric;
+      if(state.type!=='prompts'||!rubric?.criteria?.length)return '';
+      const score=entry.meta.review_score||'未採点';
+      const status=entry.meta.review_status||'未採点';
+      const attempts=entry.meta.generation_attempts||'未記録';
+      return `<section class="review-panel">
+        <h3>採用レビュー基準</h3>
+        <p class="composer-note">${escapeHtml(rubric.title||'生成イラスト採用レビュー基準')}。合計${escapeHtml(rubric.score_total||100)}点中、${escapeHtml(rubric.adoption_threshold||80)}点以上で採用。修正・生成テストは最大${escapeHtml(rubric.max_generation_tests||3)}回まで。</p>
+        <div class="review-summary">
+          <span class="review-pill strong">採用ライン：${escapeHtml(rubric.adoption_threshold||80)}点以上</span>
+          <span class="review-pill">現在スコア：${escapeHtml(score)}</span>
+          <span class="review-pill">レビュー状態：${escapeHtml(status)}</span>
+          <span class="review-pill">生成回数：${escapeHtml(attempts)} / ${escapeHtml(rubric.max_generation_tests||3)}</span>
+        </div>
+        <div class="score-list">${rubric.criteria.map(c=>`<div class="score-row"><span class="score-points">${escapeHtml(c.points)}点</span><span><span class="score-title">${escapeHtml(c.label)}</span><span class="score-desc">${escapeHtml(c.description)}</span></span></div>`).join('')}</div>
+      </section>`;
     }
     function buildComposer(entry){
       if(state.type!=='prompts'||!state.defaults?.defaults?.length)return '';
@@ -265,7 +293,7 @@
     }
     function filtered(){const q=state.query.trim().toLowerCase();return state.entries.filter(e=>e.type===state.type&&(!q||`${e.meta.title} ${e.meta.id} ${e.text}`.toLowerCase().includes(q)))}
     function renderList(){const found=filtered();g('summary').textContent=`${found.length}件`;if(!found.length){g('items').innerHTML='<div class="empty">該当する資料がありません。</div>';return}const familyOrder=['高速戦・瞬間移動','重量級の一撃','武術・格闘技','剣戟','銃撃・射撃戦','魔法・必殺技','巨大怪獣・巨大ロボ','スポーツ','ダンス・舞踏','レース・乗り物'];const tierOrder=['基本型','演出型','差し替え型'];const sorted=[...found].sort((a,b)=>{if(state.type!=='prompts')return String(a.meta.title).localeCompare(String(b.meta.title),'ja');const af=familyOrder.indexOf(a.meta.family),bf=familyOrder.indexOf(b.meta.family);if(af!==bf)return (af<0?999:af)-(bf<0?999:bf);return tierOrder.indexOf(a.meta.tier)-tierOrder.indexOf(b.meta.tier)});let last='';g('items').innerHTML=sorted.map(e=>{const family=state.type==='prompts'?(e.meta.family||'その他'):'';const heading=family&&family!==last?`<div class="group">${escapeHtml(family)}</div>`:'';last=family;return heading+`<button class="item ${state.selected===e.meta.id?'active':''}" data-id="${escapeHtml(e.meta.id)}"><span class="item-title">${escapeHtml(e.meta.title||e.meta.id)}</span><span class="item-id">${escapeHtml(e.meta.id)}</span><span class="badges">${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</span></button>`}).join('');}
-    function select(id,push=true){const e=state.entries.find(x=>x.meta.id===id);if(!e)return;state.selected=id;renderList();const preview=e.meta.preview_image?`<figure class="preview-wrap"><a href="./${escapeHtml(e.meta.preview_image)}" target="_blank" rel="noopener"><img class="preview" src="./${escapeHtml(e.meta.preview_image)}" alt="${escapeHtml(e.meta.title||e.meta.id)}のテスト生成作例" loading="lazy"></a><figcaption class="preview-caption">Codexによるテスト生成作例。クリックすると原寸画像を開きます。</figcaption></figure>`:'';g('detail').innerHTML=`<button class="mobile-back" id="mobileBack" type="button">← 一覧へ戻る</button><div class="doc-id">${escapeHtml(e.meta.id)}</div><h2 class="doc-title">${escapeHtml(e.meta.title||e.meta.id)}</h2><div class="doc-meta"><span class="badge status">${escapeHtml(e.meta.status||'')}</span>${e.meta.preview_image?'<span class="badge status">作例あり</span>':''}${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</div>${preview}${buildComposer(e)}<div class="content">${renderMarkdown(e.body)}</div>`;g('layout').classList.add('show-detail');assemblePrompt();if(push)history.replaceState(null,'','#'+encodeURIComponent(id));window.scrollTo({top:0,behavior:'smooth'});}
+    function select(id,push=true){const e=state.entries.find(x=>x.meta.id===id);if(!e)return;state.selected=id;renderList();const preview=e.meta.preview_image?`<figure class="preview-wrap"><a href="./${escapeHtml(e.meta.preview_image)}" target="_blank" rel="noopener"><img class="preview" src="./${escapeHtml(e.meta.preview_image)}" alt="${escapeHtml(e.meta.title||e.meta.id)}のテスト生成作例" loading="lazy"></a><figcaption class="preview-caption">Codexによるテスト生成作例。クリックすると原寸画像を開きます。</figcaption></figure>`:'';g('detail').innerHTML=`<button class="mobile-back" id="mobileBack" type="button">← 一覧へ戻る</button><div class="doc-id">${escapeHtml(e.meta.id)}</div><h2 class="doc-title">${escapeHtml(e.meta.title||e.meta.id)}</h2><div class="doc-meta"><span class="badge status">${escapeHtml(e.meta.status||'')}</span>${e.meta.preview_image?'<span class="badge status">作例あり</span>':''}${tags(e.meta).map(t=>`<span class="badge">${escapeHtml(t)}</span>`).join('')}</div>${preview}${buildReviewPanel(e)}${buildComposer(e)}<div class="content">${renderMarkdown(e.body)}</div>`;g('layout').classList.add('show-detail');assemblePrompt();if(push)history.replaceState(null,'','#'+encodeURIComponent(id));window.scrollTo({top:0,behavior:'smooth'});}
     async function copyText(text,button){await navigator.clipboard.writeText(text);const old=button.textContent;button.textContent='コピー済み';setTimeout(()=>button.textContent=old,1200)}
     async function loadAssets(){
       try{
@@ -275,7 +303,7 @@
         return {characters};
       }catch{return {characters:[]}}
     }
-    async function init(){try{const [index,defaults,assets]=await Promise.all([fetch('./catalog/'+encodeURIComponent('ライブラリ索引.json')).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}),fetch('./defaults/default-corrections.json').then(r=>r.ok?r.json():null).catch(()=>null),loadAssets()]);state.defaults=defaults;state.assets=assets;const jobs=[];['prompts','modules','cards'].forEach(type=>(index[type]||[]).forEach(entry=>jobs.push(fetch('./'+entry.path.split('/').map(encodeURIComponent).join('/')).then(r=>r.text()).then(text=>{const parsed=parseFrontMatter(text);return{type,text,body:parsed.body,meta:{...parsed.meta,id:parsed.meta.id||entry.id}}}))));state.entries=await Promise.all(jobs);renderList();const hash=decodeURIComponent(location.hash.slice(1));const hashed=state.entries.find(e=>e.meta.id===hash);if(hashed)select(hashed.meta.id,false);else if(innerWidth>760){const first=filtered()[0];if(first)select(first.meta.id,false)}}catch(err){g('summary').textContent='読み込み失敗';g('items').innerHTML='<div class="empty error">ライブラリを読み込めませんでした。Pages上から開き直してください。</div>';console.error(err)}}
+    async function init(){try{const [index,defaults,rubric,assets]=await Promise.all([fetch('./catalog/'+encodeURIComponent('ライブラリ索引.json')).then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}),fetch('./defaults/default-corrections.json').then(r=>r.ok?r.json():null).catch(()=>null),fetch('./catalog/review-rubric.json').then(r=>r.ok?r.json():null).catch(()=>null),loadAssets()]);state.defaults=defaults;state.rubric=rubric;state.assets=assets;const jobs=[];['prompts','modules','cards'].forEach(type=>(index[type]||[]).forEach(entry=>jobs.push(fetch('./'+entry.path.split('/').map(encodeURIComponent).join('/')).then(r=>r.text()).then(text=>{const parsed=parseFrontMatter(text);return{type,text,body:parsed.body,meta:{...parsed.meta,id:parsed.meta.id||entry.id}}}))));state.entries=await Promise.all(jobs);renderList();const hash=decodeURIComponent(location.hash.slice(1));const hashed=state.entries.find(e=>e.meta.id===hash);if(hashed)select(hashed.meta.id,false);else if(innerWidth>760){const first=filtered()[0];if(first)select(first.meta.id,false)}}catch(err){g('summary').textContent='読み込み失敗';g('items').innerHTML='<div class="empty error">ライブラリを読み込めませんでした。Pages上から開き直してください。</div>';console.error(err)}}
     document.addEventListener('input',e=>{if(e.target.closest('.composer'))assemblePrompt()});
     document.addEventListener('change',e=>{if(e.target.closest('.composer'))assemblePrompt()});
     document.addEventListener('click',e=>{const item=e.target.closest('[data-id]');if(item)select(item.dataset.id);const tab=e.target.closest('.tab');if(tab){state.type=tab.dataset.type;document.querySelectorAll('.tab').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));state.selected=null;g('layout').classList.remove('show-detail');renderList();const first=filtered()[0];if(first&&innerWidth>760)select(first.meta.id)}const preset=e.target.closest('[data-preset]');if(preset){const p=(state.defaults?.presets||[]).find(x=>x.id===preset.dataset.preset);if(p){document.querySelectorAll('[data-default-id]').forEach(input=>input.checked=p.enabled_defaults.includes(input.dataset.defaultId));assemblePrompt()}}const refresh=e.target.closest('[data-refresh-assembled]');if(refresh)assemblePrompt();const target=e.target.closest('[data-copy-target]');if(target){const el=document.getElementById(target.dataset.copyTarget);if(el)copyText(el.dataset.plain||el.textContent,target)}const copy=e.target.closest('[data-copy]');if(copy)copyText(copy.dataset.copy,copy);if(e.target.id==='mobileBack')g('layout').classList.remove('show-detail')});

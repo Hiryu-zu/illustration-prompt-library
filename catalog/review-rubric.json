@@ -1,0 +1,74 @@
+{
+  "schema_version": "0.1",
+  "title": "生成イラスト採用レビュー基準",
+  "adoption_threshold": 80,
+  "max_revision_cycles": 3,
+  "max_generation_tests": 3,
+  "score_total": 100,
+  "status_rules": [
+    {
+      "status": "library",
+      "label": "採用",
+      "condition": "80点以上、重大な破綻なし、3回以内の生成テストで到達"
+    },
+    {
+      "status": "candidate",
+      "label": "採用候補",
+      "condition": "70〜79点、または80点以上だが再現確認が不足"
+    },
+    {
+      "status": "needs_revision",
+      "label": "要修正",
+      "condition": "50〜69点、改善すれば採用可能"
+    },
+    {
+      "status": "rejected",
+      "label": "不採用",
+      "condition": "49点以下、または3回修正しても80点未満"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "intent",
+      "label": "目的表現が一目で伝わる",
+      "points": 20,
+      "description": "速度感、重量感、緊張感など、プロンプトの主目的が説明なしで伝わるか。"
+    },
+    {
+      "id": "readability",
+      "label": "主役・動作・構図が読める",
+      "points": 20,
+      "description": "主役、行動、視線誘導、力の方向が一秒以内に読めるか。"
+    },
+    {
+      "id": "focus_control",
+      "label": "鮮明に残す場所が守られている",
+      "points": 15,
+      "description": "顔、胸、軸脚、武器の鍔など、指定した焦点がブラーやエフェクトで潰れていないか。"
+    },
+    {
+      "id": "breakage_control",
+      "label": "破綻・曖昧さが許容範囲",
+      "points": 15,
+      "description": "手、姿勢、顔、衣装、残像、武器などの崩れや意図しない解釈が制作上許容できるか。"
+    },
+    {
+      "id": "reuse",
+      "label": "再利用・差し替えがしやすい",
+      "points": 10,
+      "description": "専用キャラ、背景、参考画像、デフォルト補正と組み合わせやすい構造か。"
+    },
+    {
+      "id": "prompt_traceability",
+      "label": "改善点と出典を追跡できる",
+      "points": 10,
+      "description": "作例、所見、失敗条件、Source/Card/Moduleへの逆引きが残っているか。"
+    },
+    {
+      "id": "reproducibility",
+      "label": "3回以内で80点以上に到達する",
+      "points": 10,
+      "description": "最大3回の修正・生成テスト内で、80点以上の結果に到達できるか。"
+    }
+  ]
+}
